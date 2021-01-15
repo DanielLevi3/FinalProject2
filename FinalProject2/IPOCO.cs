@@ -6,8 +6,5 @@ namespace FinalProject2
 {
     interface IPOCO
     {
-       void Getall();
-        void Remove();
-        void Add();
     }
 }
