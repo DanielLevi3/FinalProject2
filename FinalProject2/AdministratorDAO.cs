@@ -60,7 +60,7 @@ namespace FinalProject2
 
                 var reader = command.ExecuteReader();
                 Administrator t = new Administrator();
-                while (reader.Read())
+                while (reader.Read())  
                 {
                     t.ID = (long)reader["id"];
                     t.FirstName = (string)reader["first_name"];
