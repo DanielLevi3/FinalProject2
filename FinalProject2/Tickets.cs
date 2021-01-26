@@ -4,39 +4,41 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class Country :IPOCO
+    class Tickets:IPOCO
     {
         public long ID { get; set; }
-        public string Name { get; set; }
+        public long CustomerID { get; set; }
+        public long FlightID { get; set;}
 
-        public Country(string name)
-        {
-            Name = name;
-        }
-        public Country()
+        public Tickets()
         {
 
         }
-        public static bool operator ==(Country c1, Country c2)
+        public Tickets(long customerID, long flightID)
         {
-            if (ReferenceEquals(c1, null) && ReferenceEquals(c2, null))
+            CustomerID = customerID;
+            FlightID = flightID;
+        }
+        public static bool operator ==(Tickets t1, Tickets t2)
+        {
+            if (ReferenceEquals(t1, null) && ReferenceEquals(t2, null))
             {
                 return true;
             }
 
-            if (ReferenceEquals(c1, null) || ReferenceEquals(c2, null))
+            if (ReferenceEquals(t1, null) || ReferenceEquals(t2, null))
             {
                 return false;
             }
-            if (c1.ID == c2.ID)
+            if (t1.ID == t2.ID)
             {
                 return true;
             }
             return false;
         }
-        public static bool operator !=(Country c1, Country c2)
+        public static bool operator !=(Tickets t1, Tickets t2)
         {
-            if (!(c1.ID == c2.ID))
+            if (!(t1.ID == t2.ID))
             {
                 return true;
             }
@@ -45,7 +47,7 @@ namespace FinalProject2
 
         public override bool Equals(object obj)
         {
-            Country other = (Country)obj;
+            Tickets other = (Tickets)obj;
             return this.ID == other.ID;
         }
 
@@ -55,9 +57,10 @@ namespace FinalProject2
             return (int)this.ID;
         }
 
+
         public override string ToString()
         {
-            return $"{Newtonsoft.Json.JsonConvert.SerializeObject(this)}"; 
+            return $"{Newtonsoft.Json.JsonConvert.SerializeObject(this)}";
         }
     }
 }

@@ -4,53 +4,54 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class Administrator:IPOCO,IUser
+    class Users
     {
         public long ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Level { get; set; }
-
-        public Administrator()
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public long UserRole { set; get; }
+        public Users()
         {
 
         }
 
-        public Administrator(string firstName, string lastName, int level)
+        public Users(string userName, string password, string email, long userRole)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            Level = level;
+            UserName = userName;
+            Password = password;
+            Email = email;
+            UserRole = userRole;
         }
-        public static bool operator ==(Administrator a1, Administrator a2)
+        public static bool operator ==(Users u1, Users u2)
         {
-            if (ReferenceEquals(a1, null) && ReferenceEquals(a2, null))
+            if (ReferenceEquals(u1, null) && ReferenceEquals(u2, null))
             {
                 return true;
             }
 
-            if (ReferenceEquals(a1, null) || ReferenceEquals(a2, null))
+            if (ReferenceEquals(u1, null) || ReferenceEquals(u2, null))
             {
                 return false;
             }
-            if (a1.ID == a2.ID)
+            if (u1.ID == u2.ID)
             {
                 return true;
             }
             return false;
         }
-        public static bool operator !=(Administrator a1, Administrator a2)
+        public static bool operator !=(Users u1, Users u2)
         {
-            if (!(a1.ID == a2.ID))
+            if (!(u1.ID == u2.ID))
             {
                 return true;
             }
             return false;
         }
-
+      
         public override bool Equals(object obj)
         {
-            Administrator other = (Administrator)obj;
+            Users other = (Users)obj;
             return this.ID == other.ID;
         }
 

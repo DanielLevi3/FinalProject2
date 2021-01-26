@@ -4,20 +4,32 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class Country :IPOCO
+    class Customers:IPOCO,IUser
     {
         public long ID { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CreditNumber { get; set; }
+        public long UserId { set; get; }
 
-        public Country(string name)
-        {
-            Name = name;
-        }
-        public Country()
+        public Customers()
         {
 
         }
-        public static bool operator ==(Country c1, Country c2)
+
+        public Customers(string firstName, string lastName, string address, string phoneNumber, string creditNumber, long userId)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            CreditNumber = creditNumber;
+            UserId = userId;
+        }
+
+        public static bool operator ==(Customers c1, Customers c2)
         {
             if (ReferenceEquals(c1, null) && ReferenceEquals(c2, null))
             {
@@ -34,7 +46,7 @@ namespace FinalProject2
             }
             return false;
         }
-        public static bool operator !=(Country c1, Country c2)
+        public static bool operator !=(Customers c1, Customers c2)
         {
             if (!(c1.ID == c2.ID))
             {
@@ -45,7 +57,7 @@ namespace FinalProject2
 
         public override bool Equals(object obj)
         {
-            Country other = (Country)obj;
+            Customers other = (Customers)obj;
             return this.ID == other.ID;
         }
 
@@ -55,9 +67,10 @@ namespace FinalProject2
             return (int)this.ID;
         }
 
+
         public override string ToString()
         {
-            return $"{Newtonsoft.Json.JsonConvert.SerializeObject(this)}"; 
+            return $"{Newtonsoft.Json.JsonConvert.SerializeObject(this)}";
         }
     }
 }

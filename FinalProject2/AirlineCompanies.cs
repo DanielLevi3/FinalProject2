@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FinalProject2
+{
+    class AirlineCompanies:IPOCO,IUser
+    {
+        public long ID { get; set; }
+        public string Name { get; set; }
+        public long CountryId { get; set; }
+        public long UserId { set; get; }
+
+        public AirlineCompanies()
+        {
+
+        }
+
+        public AirlineCompanies(string name, long countryId, long userId)
+        {
+            Name = name;
+            CountryId = countryId;
+            UserId = userId;
+        }
+        public static bool operator ==(AirlineCompanies ac1, AirlineCompanies ac2)
+        {
+            if (ReferenceEquals(ac1, null) && ReferenceEquals(ac2, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(ac1, null) || ReferenceEquals(ac2, null))
+            {
+                return false;
+            }
+            if (ac1.ID == ac2.ID)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool operator !=(AirlineCompanies ac1, AirlineCompanies ac2)
+        {
+            if (!(ac1.ID == ac2.ID))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            AirlineCompanies other = (AirlineCompanies)obj;
+            return this.ID == other.ID;
+        }
+
+        public override int GetHashCode()
+        {
+
+            return (int)this.ID;
+        }
+
+        {
+            return $"{Newtonsoft.Json.JsonConvert.SerializeObject(this)}";
+        }
+    }
+}
