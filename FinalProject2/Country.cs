@@ -13,7 +13,7 @@ namespace FinalProject2
         {
             Name = name;
         }
-        public Tickets()
+        public Country()
         {
 
         }
