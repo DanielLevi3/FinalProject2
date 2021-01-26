@@ -7,7 +7,7 @@ namespace FinalProject2
     class Country :IPOCO
     {
         public long ID { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } 
 
         public Country(string name)
         {
