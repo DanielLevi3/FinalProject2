@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class Users
+    class Users:IPOCO
     {
         public long ID { get; set; }
         public string UserName { get; set; }

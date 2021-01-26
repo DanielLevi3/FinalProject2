@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class TicketsDAO : IBasicDb<Tickets>
+    class UsersDAO : IBasicDb<Users>
     {
         string conn_string;
         private void ExecuteNonQuery(string procedure)
@@ -18,18 +18,18 @@ namespace FinalProject2
                 cmd.ExecuteNonQuery();
             }
         }
-        public void Add(Tickets t)
+        public void Add(Users u)
         {
-            ExecuteNonQuery($"call sp_add_ticket({t.CustomerID},{t.FlightID})");
+            ExecuteNonQuery($"call sp_add_users('{u.UserName}','{u.Password}','{u.Email}',{u.UserRole})");
         }
 
-        public Tickets Get(long id)
+        public Users Get(long id)
         {
-            Tickets t = new Tickets();
+            Users u = new Users();
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_tickets_by_id({id})";
+                string sp_name = $"select * from sp_get_users_by_id({id})";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
@@ -38,46 +38,50 @@ namespace FinalProject2
                 var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    t.ID = (long)reader["id"];
-                    t.CustomerID = (long)reader["customer_id"];
-                    t.FlightID=(long)reader["flight_id"];
+                    u.ID = (long)reader["id"];
+                    u.UserName = (string)reader["username"];
+                    u.Password = (string)reader["password"];
+                    u.Email = (string)reader["email"];
+                    u.UserRole = (long)reader["user_role"];
                 }
             }
-            return t;
+            return u;
         }
-        public List<Tickets> GetAll()
+        public List<Users> GetAll()
         {
-            List<Tickets> t_list = new List<Tickets>();
+            List<Users> u_list = new List<Users>();
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = "sp_get_all_tickets";
+                string sp_name = "sp_get_all_users";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
 
 
                 var reader = command.ExecuteReader();
-                Tickets t = new Tickets();
+                Users u = new Users();
                 while (reader.Read())
                 {
-                    t.ID = (long)reader["id"];
-                    t.CustomerID = (long)reader["customer_id"];
-                    t.FlightID = (long)reader["flight_id"];
+                    u.ID = (long)reader["id"];
+                    u.UserName = (string)reader["username"];
+                    u.Password = (string)reader["password"];
+                    u.Email = (string)reader["email"];
+                    u.UserRole = (long)reader["user_role"];
                 }
-                t_list.Add(t);
+                u_list.Add(u);
             }
-            return t_list;
+            return u_list;
         }
 
         public void Remove(long id)
         {
-            ExecuteNonQuery($"call sp_remove_tickets({id})");
+            ExecuteNonQuery($"call sp_remove_users({id})");
         }
 
-        public void Update(Tickets t)
+        public void Update(Users u)
         {
-            ExecuteNonQuery($"call sp_update_tickets({t.ID},{t.CustomerID},{t.FlightID})");
+            ExecuteNonQuery($"call sp_update_users({u.ID},'{u.UserName}','{u.Password}','{u.Email}',{u.UserRole})");
         }
     }
 }
