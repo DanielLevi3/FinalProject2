@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FinalProject2
 {
-    class AirlineCompaniesDAO : IBasicDb<AirlineCompanies>
+    class AdministratorDAOPGSQL : IAdministratorDAO
     {
         string conn_string;
         private void ExecuteNonQuery(string procedure)
@@ -18,64 +18,68 @@ namespace FinalProject2
                 cmd.ExecuteNonQuery();
             }
         }
-        public void Add(AirlineCompanies ac)
+        public void Add(Administrator t)
         {
-            ExecuteNonQuery($"call sp_add_airlinecompanies({ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_add_administrator('{t.FirstName}','{t.LastName}',{t.Level})");
         }
-        public AirlineCompanies Get(long id)
+
+        public Administrator GetById(long id)
         {
-            AirlineCompanies ac = new AirlineCompanies();
+            Administrator t = new Administrator();
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_airlinecompanies_by_id({id})";
+                string sp_name = $"select * from sp_get_administrator_by_id({id})";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
+
 
                 var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId= (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
+                    t.ID = (long)reader["id"];
+                    t.FirstName = (string)reader["first_name"];
+                    t.LastName = (string)reader["last_name"];
+                    t.Level = (int)reader["level"];
                 }
             }
-            return ac;
+            return t;
         }
-        public List<AirlineCompanies> GetAll()
+        public List<Administrator> GetAll()
         {
-            List<AirlineCompanies> ac_list = new List<AirlineCompanies>();
+            List<Administrator> a_list = new List<Administrator>();
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = "sp_get_all_airlinecomapnies";
+                string sp_name = "sp_get_all_administrators";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
 
 
                 var reader = command.ExecuteReader();
-                AirlineCompanies ac = new AirlineCompanies();
-                while (reader.Read())
+                Administrator t = new Administrator();
+                while (reader.Read())  
                 {
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId = (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
+                    t.ID = (long)reader["id"];
+                    t.FirstName = (string)reader["first_name"];
+                    t.LastName = (string)reader["last_name"];
+                    t.Level = (int)reader["level"];
                 }
-                ac_list.Add(ac);
+               a_list.Add(t);
             }
-            return ac_list;
+            return a_list;
         }
 
         public void Remove(long id)
         {
-            ExecuteNonQuery($"call sp_remove_airlinecompany({id})");
+            ExecuteNonQuery($"call sp_remove_administrator({id})");
         }
 
-        public void Update(AirlineCompanies ac)
+        public void Update(Administrator t)
         {
-            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},{ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_update_administrator({t.ID},'{t.FirstName}','{t.LastName}',{t.Level})");
         }
     }
 }

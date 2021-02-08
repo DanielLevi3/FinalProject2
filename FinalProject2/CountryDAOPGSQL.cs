@@ -23,7 +23,7 @@ namespace FinalProject2
             ExecuteNonQuery($"call sp_add_country('{c.Name}')");
         }
 
-        public Country Get(long id)
+        public Country GetById(long id)
         {
             Country c = new Country();
                 using (var conn = new NpgsqlConnection(conn_string))

@@ -10,17 +10,18 @@ namespace FinalProject2
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Level { get; set; }
-
+        public long User_id { get; set;}
         public Administrator()
         {
 
         }
 
-        public Administrator(string firstName, string lastName, int level)
+        public Administrator(string firstName, string lastName, int level,long user_id)
         {
             FirstName = firstName;
             LastName = lastName;
             Level = level;
+            User_id = user_id;
         }
         public static bool operator ==(Administrator a1, Administrator a2)
         {
