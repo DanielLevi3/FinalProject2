@@ -12,7 +12,8 @@ namespace FinalProject2
         public long DestinationCountryId { get; set; }
         public DateTime DepartureTime { get; set; }
         public DateTime LandingTime { get; set; }
-        public int RemainingTickets { set; get; }
+        public int RemainingTickets { get; set;}
+        public AirlineCompanies airline { get; set; }
         public Flights()
         {
 

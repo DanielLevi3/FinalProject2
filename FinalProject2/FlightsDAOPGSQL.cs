@@ -158,7 +158,7 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"sp_get_flights_by_departure_time({departureDate})";
+                string sp_name = $"sp_get_flights_by_departure_time('{departureDate}')";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
@@ -188,7 +188,7 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"sp_get_flights_by_landing_time({landingDate})";
+                string sp_name = $"sp_get_flights_by_landing_time('{landingDate}')";
 
                 NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                 command.CommandType = System.Data.CommandType.StoredProcedure;

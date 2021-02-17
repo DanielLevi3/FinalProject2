@@ -11,6 +11,7 @@ namespace FinalProject2
         public string LastName { get; set; }
         public int Level { get; set; }
         public long User_id { get; set;}
+        public Users User { get; set; }
         public Administrator()
         {
 

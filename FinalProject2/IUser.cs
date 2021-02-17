@@ -2,7 +2,7 @@
 
 namespace FinalProject2
 {
-    interface IUser
+     public interface IUser
     {
     }
 }

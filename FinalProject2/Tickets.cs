@@ -9,6 +9,8 @@ namespace FinalProject2
         public long ID { get; set; }
         public long CustomerID { get; set; }
         public long FlightID { get; set;}
+        public Customers Customer { get; set; }
+        public Flights Flight { get; set; }
 
         public Tickets()
         {

@@ -12,7 +12,8 @@ namespace FinalProject2
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string CreditNumber { get; set; }
-        public long UserId { set; get; }
+        public long UserId { get; set; }
+        public Users User { get; set; }
 
         public Customers()
         {
