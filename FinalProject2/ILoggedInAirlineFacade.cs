@@ -12,7 +12,7 @@ namespace FinalProject2
         void CreateFlight(LoginToken<AirlineCompanies> token, Flights flight);
         void UpdateFlight(LoginToken<AirlineCompanies> token, Flights flight);
         void ChangeMyPassword(LoginToken<AirlineCompanies> token, string oldPassword, string newPassword);
-        void MofidyAirlineDetails(LoginToken<AirlineCompanies> token, AirlineCompanies airline);
+        void ModifyAirlineDetails(LoginToken<AirlineCompanies> token, AirlineCompanies airline);
 
     }
 }

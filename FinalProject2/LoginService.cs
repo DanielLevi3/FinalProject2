@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FinalProject2
 {
@@ -15,51 +14,58 @@ namespace FinalProject2
             token = new LoginToken<IUser>();
             UsersDAOPGSQL u = new UsersDAOPGSQL();
             List<Users> users = u.GetAll();
-            for(int i = 0; i < users.Count; i++)
+            try
             {
-                if(users[i].UserName == userName && users[i].Password == password)
+                for (int i = 0; i < users.Count; i++)
                 {
-                    if(users[i].UserRole==1)
+                    if (users[i].UserName == userName && users[i].Password == password)
                     {
-                       
-                        List<Administrator> administrators = _adminDAO.GetAll();
-                        for(int b = 0 ;b < administrators.Count; b++)
+                        if (users[i].UserRole == 1)
                         {
-                            if(administrators[b].User_id == users[i].ID)
+
+                            List<Administrator> administrators = _adminDAO.GetAll();
+                            for (int b = 0; b < administrators.Count; b++)
                             {
-                                token.User = administrators[b];
-                                facade = new LoggedInAdministratorFacade();
-                                return true;
+                                if (administrators[b].User_id == users[i].ID)
+                                {
+                                    token.User = administrators[b];
+                                    facade = new LoggedInAdministratorFacade();
+                                    return true;
+                                }
                             }
                         }
-                    }
-                    else if(users[i].UserRole==2)
-                    {
-                        List<AirlineCompanies> airCompanies = _arilineDAO.GetAll();
-                        for(int b = 0;b < airCompanies.Count; b++)
+                        else if (users[i].UserRole == 2)
                         {
-                            if(airCompanies[b].UserId==users[i].ID)
+                            List<AirlineCompanies> airCompanies = _arilineDAO.GetAll();
+                            for (int b = 0; b < airCompanies.Count; b++)
                             {
-                                token.User = airCompanies[b];
-                                facade = new LoggedInAirlineFacade();
-                                return true;
+                                if (airCompanies[b].UserId == users[i].ID)
+                                {
+                                    token.User = airCompanies[b];
+                                    facade = new LoggedInAirlineFacade();
+                                    return true;
+                                }
                             }
                         }
-                    }
-                    else if(users[i].UserRole==3)
-                    {
-                        List<Customers> customers = _customerDAO.GetAll();
-                        for(int b = 0; b < customers.Count; b++)
+                        else if (users[i].UserRole == 3)
                         {
-                            if(customers[b].UserId==users[i].ID)
+                            List<Customers> customers = _customerDAO.GetAll();
+                            for (int b = 0; b < customers.Count; b++)
                             {
-                                token.User = customers[b];
-                                facade = new LoggedInCustomerFacade();
-                                return true;
+                                if (customers[b].UserId == users[i].ID)
+                                {
+                                    token.User = customers[b];
+                                    facade = new LoggedInCustomerFacade();
+                                    return true;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch(WrongCredentialsException ex)
+            {
+                Console.WriteLine($"Wrong credentials... Try again {ex}");
             }
             token = null;
             facade = null;

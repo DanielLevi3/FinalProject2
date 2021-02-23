@@ -8,17 +8,33 @@ namespace FinalProject2
     {
         public void CancelTicket(LoginToken<Customers> token, Tickets ticket)
         {
-            throw new NotImplementedException();
+            if(token!=null)
+            {
+                _ticketDAO.Remove(ticket.ID);
+            }
         }
 
         public IList<Flights> GetAllMyFlights(LoginToken<Customers> token)
         {
-            throw new NotImplementedException();
+            IList<Flights> flights = new List<Flights>();
+            if(token!=null)
+            {
+              flights = _flightDAO.GetAll();
+            }
+            return flights;
         }
 
         public Tickets PurchaseTicket(LoginToken<Customers> token, Flights flight)
         {
-            throw new NotImplementedException();
+            Tickets ticket = new Tickets();
+            if (token!=null)
+            {
+                ticket.CustomerID = token.User.ID;
+                ticket.FlightID = flight.ID;
+                ticket.Customer = token.User;
+                ticket.Flight = flight;
+            }
+            return ticket;
         }
     }
 }

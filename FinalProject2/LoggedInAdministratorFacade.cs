@@ -8,54 +8,111 @@ namespace FinalProject2
     {
         public void CreateAdmin(LoginToken<Administrator> token, Administrator admin)
         {
-            throw new NotImplementedException();
+            if(token != null)
+            {
+                if (token.User.Level == 3)
+                {
+                    _adminDAO.Add(admin);
+                }
+                else
+                {
+                    Console.WriteLine("Your level of administration is too low, must be level 3 to add administrator");
+                }
+            }
         }
 
         public void CreateNewAirline(LoginToken<Administrator> token, AirlineCompanies airline)
         {
-            throw new NotImplementedException();
+            if(token != null)
+            {
+              _airlineDAO.Add(airline);
+            }
         }
 
         public void CreateNewCustomer(LoginToken<Administrator> token, Customers customer)
         {
-            throw new NotImplementedException();
+            if(token !=null)
+            {
+                _customerDAO.Add(customer);
+            }
         }
 
         public IList<Customers> GetAllCustomers(LoginToken<Administrator> token)
-        { 
+        {
             IList<Customers> customers = new List<Customers>();
-            customers = _customerDAO.GetAll();
+            if (token != null)
+            { 
+                customers = _customerDAO.GetAll();
+            }
             return customers;
         }
 
         public void RemoveAdmin(LoginToken<Administrator> token, Administrator admin)
         {
-            throw new NotImplementedException();
+            if ( token != null)
+            {
+                if( token.User.Level==3)
+                {
+                    _adminDAO.Remove(admin.ID);
+                }
+                else
+                    Console.WriteLine("Your level of administration is too low, must be level 3 to remove administrator");
+            }
         }
 
         public void RemoveAirline(LoginToken<Administrator> token, AirlineCompanies airline)
         {
-            throw new NotImplementedException();
+            if(token!=null)
+            {
+                if(token.User.Level>=2)
+                {
+                    _airlineDAO.Remove(airline.ID);
+                }
+                else
+                    Console.WriteLine("Your level of administration is too low,you must be level 2 or higher");
+            }
         }
 
         public void RemoveCustomer(LoginToken<Administrator> token, Customers customer)
-        { 
-            throw new NotImplementedException();
+        {
+            if(token!=null)
+            {
+                if(token.User.Level>=2)
+                {
+                    _customerDAO.Remove(customer.ID);
+                }
+                else
+                    Console.WriteLine("Your level of administration is too low,you must be level 2 or higher");
+            }
         }
 
         public void UpdateAdmin(LoginToken<Administrator> token, Administrator admin)
         {
-            throw new NotImplementedException();
+            if(token!=null)
+            {
+                if(token.User.Level==3)
+                {
+                    _adminDAO.Update(admin);
+                }
+                else
+                    Console.WriteLine("Your level of administration is too low, must be level 3 to update administrator");
+            }
         }
 
-        public void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompanies customer)
+        public void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompanies airline)
         {
-            throw new NotImplementedException();
+            if(token!= null)
+            {
+                _airlineDAO.Update(airline);
+            }
         }
 
         public void UpdateCustomerDetails(LoginToken<Administrator> token, Customers customer)
         {
-            throw new NotImplementedException();
+            if(token!=null)
+            {
+                _customerDAO.Update(customer);
+            }
         }
     }
 }

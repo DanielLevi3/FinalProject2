@@ -8,7 +8,7 @@ namespace FinalProject2
     {
         IList<Customers> GetAllCustomers(LoginToken<Administrator> token);
         void CreateNewAirline(LoginToken<Administrator> token, AirlineCompanies airline);
-        void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompanies customer);
+        void UpdateAirlineDetails(LoginToken<Administrator> token, AirlineCompanies airline);
         void RemoveAirline(LoginToken<Administrator> token, AirlineCompanies airline);
         void CreateNewCustomer(LoginToken<Administrator> token, Customers customer);
         void UpdateCustomerDetails(LoginToken<Administrator> token, Customers customer);
