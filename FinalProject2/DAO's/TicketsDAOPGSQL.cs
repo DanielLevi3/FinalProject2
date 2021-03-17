@@ -8,7 +8,7 @@ namespace FinalProject2
 {
     public class TicketsDAOPGSQL : ITicketsDAO
     {
-        string conn_string;
+        private readonly string conn_string;
         public TicketsDAOPGSQL()
         {
             GetConnection g = new GetConnection();
@@ -35,18 +35,19 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_tickets_by_id({id})";
 
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+                using (var cmd = new NpgsqlCommand("sp_get_tickets_by_id", conn))
                 {
-                    t.ID = (long)reader["id"];
-                    t.CustomerID = (long)reader["customer_id"];
-                    t.FlightID=(long)reader["flight_id"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        t.ID = (long)reader["id"];
+                        t.CustomerID = (long)reader["customer_id"];
+                        t.FlightID = (long)reader["flight_id"];
+                    }
                 }
             }
             return t;

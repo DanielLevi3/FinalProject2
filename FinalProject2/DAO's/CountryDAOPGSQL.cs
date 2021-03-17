@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using FinalProject2.DAO_s;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,12 @@ namespace FinalProject2
 {
     public class CountryDAOPGSQL : ICountryDAO
     {
-        string conn_string;
+        private readonly string conn_string;
+        public CountryDAOPGSQL()
+        {
+            GetConnection g = new GetConnection();
+            conn_string = g.getConn;
+        }
         private void ExecuteNonQuery(string procedure)
         {
             using(var conn= new NpgsqlConnection(procedure))
@@ -26,21 +32,21 @@ namespace FinalProject2
         public Country GetById(long id)
         {
             Country c = new Country();
-                using (var conn = new NpgsqlConnection(conn_string))
+            using (var conn = new NpgsqlConnection(conn_string))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("sp_get_country_by_id", conn))
                 {
-                    conn.Open();
-                    string sp_name = $"select * from sp_get_country_by_id({id})";
-
-                    NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-                    var reader = command.ExecuteReader();
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+                    var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
                         c.ID = (long)reader["id"];
-                        c.Name= (string)reader["name"];
+                        c.Name = (string)reader["name"];
                     }
+                }
                 }
             return c;
             }

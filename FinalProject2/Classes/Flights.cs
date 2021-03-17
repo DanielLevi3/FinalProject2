@@ -13,7 +13,7 @@ namespace FinalProject2
         public DateTime DepartureTime { get; set; }
         public DateTime LandingTime { get; set; }
         public int RemainingTickets { get; set;}
-        public AirlineCompanies airline { get; set; }
+        public AirlineCompanies Airline { get; set; }
         public Flights()
         {
 

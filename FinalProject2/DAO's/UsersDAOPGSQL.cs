@@ -8,7 +8,7 @@ namespace FinalProject2
 {
     public class UsersDAOPGSQL : IUserDAO
     {
-        string conn_string;
+        private readonly string conn_string;
         public UsersDAOPGSQL()
         {
             GetConnection g = new GetConnection();
@@ -35,20 +35,22 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_users_by_id({id})";
 
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+                using (var cmd = new NpgsqlCommand("sp_get_users_by_id", conn))
                 {
-                    u.ID = (long)reader["id"];
-                    u.UserName = (string)reader["username"];
-                    u.Password = (string)reader["password"];
-                    u.Email = (string)reader["email"];
-                    u.UserRole = (long)reader["user_role"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        u.ID = (long)reader["id"];
+                        u.UserName = (string)reader["username"];
+                        u.Password = (string)reader["password"];
+                        u.Email = (string)reader["email"];
+                        u.UserRole = (long)reader["user_role"];
+                    }
                 }
             }
             return u;
@@ -59,20 +61,21 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_users_by_username({username})";
 
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+                using (var cmd = new NpgsqlCommand("sp_get_users_by_username", conn))
                 {
-                    u.ID = (long)reader["id"];
-                    u.UserName = (string)reader["username"];
-                    u.Password = (string)reader["password"];
-                    u.Email = (string)reader["email"];
-                    u.UserRole = (long)reader["user_role"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("username1", username));
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        u.ID = (long)reader["id"];
+                        u.UserName = (string)reader["username"];
+                        u.Password = (string)reader["password"];
+                        u.Email = (string)reader["email"];
+                        u.UserRole = (long)reader["user_role"];
+                    }
                 }
             }
             return u;

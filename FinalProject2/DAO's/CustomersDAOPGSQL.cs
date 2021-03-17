@@ -8,7 +8,7 @@ namespace FinalProject2
 {
     public class CustomersDAOPGSQL : ICustomerDAO
     {
-        string conn_string;
+       private readonly string conn_string;
         public CustomersDAOPGSQL()
         {
                 GetConnection g = new GetConnection();
@@ -34,19 +34,22 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_customers_by_id({id})";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+
+                using (var cmd = new NpgsqlCommand("sp_get_customers_by_id", conn))
                 {
-                    c.ID = (long)reader["id"];
-                    c.FirstName = (string)reader["first_name"];
-                    c.LastName = (string)reader["last_name"];
-                    c.Address = (string)reader["address"];
-                    c.PhoneNumber = (string)reader["phone_no"];
-                    c.CreditNumber = (string)reader["credit_card_no"];
-                    c.UserId = (long)reader["user_id"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        c.ID = (long)reader["id"];
+                        c.FirstName = (string)reader["first_name"];
+                        c.LastName = (string)reader["last_name"];
+                        c.Address = (string)reader["address"];
+                        c.PhoneNumber = (string)reader["phone_no"];
+                        c.CreditNumber = (string)reader["credit_card_no"];
+                        c.UserId = (long)reader["user_id"];
+                    }
                 }
             }
             return c;
@@ -91,19 +94,23 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_customers_by_username('{name}')";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+
+                using (var cmd = new NpgsqlCommand("sp_get_customers_by_username", conn))
                 {
-                    c.ID = (long)reader["id"];
-                    c.FirstName = (string)reader["first_name"];
-                    c.LastName = (string)reader["last_name"];
-                    c.Address = (string)reader["address"];
-                    c.PhoneNumber = (string)reader["phone_no"];
-                    c.CreditNumber = (string)reader["credit_card_no"];
-                    c.UserId = (long)reader["user_id"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("uname", name));
+                  
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        c.ID = (long)reader["id"];
+                        c.FirstName = (string)reader["first_name"];
+                        c.LastName = (string)reader["last_name"];
+                        c.Address = (string)reader["address"];
+                        c.PhoneNumber = (string)reader["phone_no"];
+                        c.CreditNumber = (string)reader["credit_card_no"];
+                        c.UserId = (long)reader["user_id"];
+                    }
                 }
             }
             return c;

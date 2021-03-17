@@ -8,7 +8,7 @@ namespace FinalProject2
 {
     public class AirlineCompaniesDAOPGSQL : IAirlineCompanyDAO
     {
-        string conn_string;
+        private readonly string conn_string;
         public AirlineCompaniesDAOPGSQL()
         {
             GetConnection g = new GetConnection();
@@ -34,15 +34,19 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_airlinecompanies_by_id({id})";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+
+                using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_id", conn))
                 {
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId= (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        ac.ID = (long)reader["id"];
+                        ac.CountryId = (long)reader["country_id"];
+                        ac.UserId = (long)reader["user_id"];
+                    }
                 }
             }
             return ac;
@@ -82,15 +86,19 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"select * from sp_get_airlinecompanies_by_username('{u_name}')";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+
+                using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_username", conn))
                 {
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId = (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("user_name", u_name));
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        ac.ID = (long)reader["id"];
+                        ac.CountryId = (long)reader["country_id"];
+                        ac.UserId = (long)reader["user_id"];
+
+                    }
                 }
             }
             return ac;
@@ -101,19 +109,24 @@ namespace FinalProject2
             using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
-                string sp_name = $"sp_get_airlinecompanies_by_country_id({countryId})";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                while (reader.Read())
+
+                using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_country_id", conn))
                 {
-                    AirlineCompanies ac = new AirlineCompanies();
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId = (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
-                    ac_list.Add(ac);
-                }    
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new NpgsqlParameter("country_id_parm", countryId));
+
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        AirlineCompanies ac = new AirlineCompanies();
+                        ac.ID = (long)reader["id"];
+                        ac.CountryId = (long)reader["country_id"];
+                        ac.UserId = (long)reader["user_id"];
+                        ac_list.Add(ac);
+                    }
+                }       
             }
+
             return ac_list;
         }
     }

@@ -65,6 +65,11 @@ namespace FinalProject2
                     }
 
                 }
+                else
+                {
+                    token.User = new Administrator();
+                    facade = new LoggedInAdministratorFacade();
+                }
 
             }
             catch(WrongCredentialsException ex)
