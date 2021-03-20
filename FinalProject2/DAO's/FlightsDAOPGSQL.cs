@@ -16,11 +16,12 @@ namespace FinalProject2
         }
         private void ExecuteNonQuery(string procedure)
         {
-            using (NpgsqlCommand cmd = new NpgsqlCommand())
-            {
-                using (cmd.Connection = new NpgsqlConnection(conn_string))
+            using (var conn = new NpgsqlConnection(conn_string))
+            { 
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(procedure,conn))
                 {
-                    cmd.Connection.Open();
+
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = procedure;
                     cmd.ExecuteNonQuery();
@@ -34,9 +35,9 @@ namespace FinalProject2
         public Flights GetById(long id)
         {
             Flights f = new Flights();
-                using (var conn = new NpgsqlConnection(conn_string))
-                {
-                    conn.Open();
+            using (var conn = new NpgsqlConnection(conn_string))
+            {
+                conn.Open();
                 using (var cmd = new NpgsqlCommand("sp_get_flights_by_id", conn))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -86,8 +87,8 @@ namespace FinalProject2
                 }
             }
             return f_list;
-            }
-        
+        }
+
 
         public void Remove(long id)
         {
@@ -95,8 +96,8 @@ namespace FinalProject2
         }
 
         public void Update(Flights f)
-        {
-            ExecuteNonQuery($"call sp_update_flights({f.ID},{f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets})");
+        { 
+            ExecuteNonQuery($"call sp_update_flights({f.ID},{f.LandingTime},{f.OriginCountryId},{f.RemainingTickets},{f.DestinationCountryId},{f.DepartureTime},{f.AirlineCompanyId})");
         }
 
         public Dictionary<Flights, int> GetAllFlightsVacancy()

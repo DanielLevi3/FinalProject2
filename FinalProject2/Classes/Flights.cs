@@ -28,6 +28,18 @@ namespace FinalProject2
             LandingTime = landingTime;
             RemainingTickets = remainingTickets;
         }
+
+        public Flights(long iD, long airlineCompanyId, long originCountryId, long destinationCountryId, DateTime departureTime, DateTime landingTime, int remainingTickets)
+        {
+            ID = iD;
+            AirlineCompanyId = airlineCompanyId;
+            OriginCountryId = originCountryId;
+            DestinationCountryId = destinationCountryId;
+            DepartureTime = departureTime;
+            LandingTime = landingTime;
+            RemainingTickets = remainingTickets;
+        }
+
         public static bool operator ==(Flights f1, Flights f2)
         {
             if (ReferenceEquals(f1, null) && ReferenceEquals(f2, null))

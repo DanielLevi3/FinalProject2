@@ -63,13 +63,17 @@ namespace FinalProject2
 
 
                     var reader = command.ExecuteReader();
-                Country c = new Country();
+        
                     while (reader.Read())
                     {
-                         c.ID= (long)reader["id"];
-                         c.Name= (string)reader["name"];
+                    Country c = new Country();
+                    {
+                        c.ID = (long)reader["id"];
+                        c.Name = (string)reader["name"];
                     }
-                c_list.Add(c);
+                    c_list.Add(c);
+                }
+             
                 }
             return c_list;
         } 

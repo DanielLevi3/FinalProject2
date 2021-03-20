@@ -43,6 +43,7 @@ namespace FinalProject2
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
+                        ac.Name = (string)reader["name"];
                         ac.ID = (long)reader["id"];
                         ac.CountryId = (long)reader["country_id"];
                         ac.UserId = (long)reader["user_id"];
@@ -64,9 +65,12 @@ namespace FinalProject2
                 while (reader.Read())
                 {
                     AirlineCompanies ac = new AirlineCompanies();
-                    ac.ID = (long)reader["id"];
-                    ac.CountryId = (long)reader["country_id"];
-                    ac.UserId = (long)reader["user_id"];
+                    {
+                        ac.Name = (string)reader["name"];
+                        ac.ID = (long)reader["id"];
+                        ac.CountryId = (long)reader["country_id"];
+                        ac.UserId = (long)reader["user_id"];
+                    }
                     ac_list.Add(ac);
                 }
             }
@@ -94,6 +98,7 @@ namespace FinalProject2
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
                     {
+                        ac.Name = (string)reader["name"];
                         ac.ID = (long)reader["id"];
                         ac.CountryId = (long)reader["country_id"];
                         ac.UserId = (long)reader["user_id"];
@@ -119,9 +124,12 @@ namespace FinalProject2
                     while (reader.Read())
                     {
                         AirlineCompanies ac = new AirlineCompanies();
-                        ac.ID = (long)reader["id"];
-                        ac.CountryId = (long)reader["country_id"];
-                        ac.UserId = (long)reader["user_id"];
+                        {
+                            ac.Name = (string)reader["name"];
+                            ac.ID = (long)reader["id"];
+                            ac.CountryId = (long)reader["country_id"];
+                            ac.UserId = (long)reader["user_id"];
+                        }
                         ac_list.Add(ac);
                     }
                 }       

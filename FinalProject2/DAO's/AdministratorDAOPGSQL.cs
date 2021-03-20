@@ -16,7 +16,7 @@ namespace FinalProject2
         }
         private void ExecuteNonQuery(string procedure)
         {
-            using (var conn = new NpgsqlConnection(procedure))
+            using (var conn = new NpgsqlConnection(conn_string))
             {
                 conn.Open();
                 NpgsqlCommand cmd = new NpgsqlCommand(procedure, conn);
@@ -27,7 +27,7 @@ namespace FinalProject2
         public void Add(Administrator t)
         {
 
-            ExecuteNonQuery($"call sp_add_administrator('{t.FirstName}','{t.LastName}',{t.Level})");
+            ExecuteNonQuery($"call sp_add_administrator('{t.FirstName}','{t.LastName}',{t.Level},{t.User_id})");
         }
         public Administrator GetById(long id)
         {
@@ -46,6 +46,7 @@ namespace FinalProject2
                         t.ID = (long)reader["id"];
                         t.FirstName = (string)reader["first_name"];
                         t.LastName = (string)reader["last_name"];
+                        t.User_id = (long)reader["user_id"];
                         t.Level = (int)reader["level"];
                     }
                 }
@@ -59,17 +60,22 @@ namespace FinalProject2
             {
                 conn.Open();
                 string sp_name = "sp_get_all_administrators";
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                var reader = command.ExecuteReader();
-                while (reader.Read())  
+                using (var cmd = new NpgsqlCommand(sp_name, conn))
                 {
-                    Administrator t = new Administrator();
-                    t.ID = (long)reader["id"];
-                    t.FirstName = (string)reader["first_name"];
-                    t.LastName = (string)reader["last_name"];
-                    t.Level = (int)reader["level"];
-                    a_list.Add(t);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Administrator t = new Administrator();
+                        {
+                            t.ID = (long)reader["id"];
+                            t.FirstName = (string)reader["first_name"];
+                            t.LastName = (string)reader["last_name"];
+                            t.Level = (int)reader["level"];
+                            t.User_id = (long)reader["user_id"];
+                        }
+                        a_list.Add(t);
+                    }
                 }
             }
             return a_list;
@@ -80,7 +86,7 @@ namespace FinalProject2
         }
         public void Update(Administrator t)
         {
-            ExecuteNonQuery($"call sp_update_administrator({t.ID},'{t.FirstName}','{t.LastName}',{t.Level})");
+            ExecuteNonQuery($"call sp_update_administrator({t.ID},'{t.FirstName}','{t.LastName}',{t.Level},{t.User_id})");
         }
     }
 }

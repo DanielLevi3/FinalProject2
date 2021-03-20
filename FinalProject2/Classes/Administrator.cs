@@ -24,6 +24,16 @@ namespace FinalProject2
             Level = level;
             User_id = user_id;
         }
+
+        public Administrator(long iD, string firstName, string lastName, int level, long user_id)
+        {
+            ID = iD;
+            FirstName = firstName;
+            LastName = lastName;
+            Level = level;
+            User_id = user_id;
+        }
+
         public static bool operator ==(Administrator a1, Administrator a2)
         {
             if (ReferenceEquals(a1, null) && ReferenceEquals(a2, null))
