@@ -8,6 +8,7 @@ namespace FinalProject2
 {
     public class UsersDAOPGSQL : IUserDAO
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string conn_string;
         public UsersDAOPGSQL()
         {
@@ -16,95 +17,127 @@ namespace FinalProject2
         }
         private void ExecuteNonQuery(string procedure)
         {
-            using (var conn = new NpgsqlConnection(procedure))
+            try
             {
-                conn.Open();
-                NpgsqlCommand cmd = new NpgsqlCommand(procedure, conn);
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.ExecuteNonQuery();
+                using (var conn = new NpgsqlConnection(conn_string))
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(procedure, conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.CommandText = procedure;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Fatal($"Check your connection to database {ex}");
             }
         }
         public void Add(Users u)
         {
             ExecuteNonQuery($"call sp_add_users('{u.UserName}','{u.Password}','{u.Email}',{u.UserRole})");
+            log.Info($"new User in the system {u}");
         }
 
         public Users GetById(long id)
         {
             Users u = new Users();
-            using (var conn = new NpgsqlConnection(conn_string))
+            try
             {
-                conn.Open();
-
-                using (var cmd = new NpgsqlCommand("sp_get_users_by_id", conn))
+                using (var conn = new NpgsqlConnection(conn_string))
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
+                    conn.Open();
 
-
-                    var reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    using (var cmd = new NpgsqlCommand("sp_get_users_by_id", conn))
                     {
-                        u.ID = (long)reader["id"];
-                        u.UserName = (string)reader["username"];
-                        u.Password = (string)reader["password"];
-                        u.Email = (string)reader["email"];
-                        u.UserRole = (long)reader["user_role"];
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("x", id));
+
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            u.ID = (long)reader["id"];
+                            u.UserName = (string)reader["username"];
+                            u.Password = (string)reader["password"];
+                            u.Email = (string)reader["email"];
+                            u.UserRole = (long)reader["user_role"];
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Something went wrong in GetUsersById {ex} check connection");
             }
             return u;
         }
         public Users GetByUserName(string username)
         {
             Users u = new Users();
-            using (var conn = new NpgsqlConnection(conn_string))
+            try
             {
-                conn.Open();
-
-                using (var cmd = new NpgsqlCommand("sp_get_users_by_username", conn))
+                using (var conn = new NpgsqlConnection(conn_string))
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new NpgsqlParameter("username1", username));
+                    conn.Open();
 
-                    var reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    using (var cmd = new NpgsqlCommand("sp_get_users_by_username", conn))
                     {
-                        u.ID = (long)reader["id"];
-                        u.UserName = (string)reader["username"];
-                        u.Password = (string)reader["password"];
-                        u.Email = (string)reader["email"];
-                        u.UserRole = (long)reader["user_role"];
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("username1", username));
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            u.ID = (long)reader["id"];
+                            u.UserName = (string)reader["username"];
+                            u.Password = (string)reader["password"];
+                            u.Email = (string)reader["email"];
+                            u.UserRole = (long)reader["user_role"];
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Something went wrong in GetUserByUserName {ex} check connection");
             }
             return u;
         }
         public List<Users> GetAll()
         {
             List<Users> u_list = new List<Users>();
-            using (var conn = new NpgsqlConnection(conn_string))
+            try
             {
-                conn.Open();
-                string sp_name = "sp_get_all_users";
-
-                NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-
-
-                var reader = command.ExecuteReader();
-               
-                while (reader.Read())
+                using (var conn = new NpgsqlConnection(conn_string))
                 {
-                    Users u = new Users();
-                    u.ID = (long)reader["id"];
-                    u.UserName = (string)reader["username"];
-                    u.Password = (string)reader["password"];
-                    u.Email = (string)reader["email"];
-                    u.UserRole = (long)reader["user_role"];
-                    u_list.Add(u);
+                    conn.Open();
+                    string sp_name = "sp_get_all_users";
+
+                    NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Users u = new Users();
+                        u.ID = (long)reader["id"];
+                        u.UserName = (string)reader["username"];
+                        u.Password = (string)reader["password"];
+                        u.Email = (string)reader["email"];
+                        u.UserRole = (long)reader["user_role"];
+                        u_list.Add(u);
+                    }
+
                 }
-               
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Something went wrong in GetAllUsers {ex} check connection");
             }
             return u_list;
         }

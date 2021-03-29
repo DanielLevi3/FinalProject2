@@ -6,6 +6,7 @@ namespace FinalProject2
 {
     public class LoggedInAirlineFacade : AnonymousUserFacade, ILoggedInAirlineFacade
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public void CancelFlight(LoginToken<AirlineCompanies> token, Flights flight)
         {
             if(token!=null)
@@ -26,6 +27,7 @@ namespace FinalProject2
                 else
                 {
                     throw new WrongPasswordExeception("The old password is incorrect please try again");
+                    
                 }
             }
         }

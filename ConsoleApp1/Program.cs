@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using FinalProject2;
+using FinalProject2.Classes;
+using log4net;
+using log4net.Config;
 
 namespace ConsoleApp1
 {
     class Program
     {
-        static void Main(string[] args)
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+    
+
+    static void Main(string[] args)
         {
-            
-           Flights f = new Flights();
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
+
+            log.Info("Hello logging world!");
+
+            Flights f = new Flights();
             FlightsDAOPGSQL f1 = new FlightsDAOPGSQL();
             List<Flights> f_list =f1.GetAll();
               f_list.ForEach((_) => Console.WriteLine(_));
@@ -75,7 +89,8 @@ namespace ConsoleApp1
             TicketsDAOPGSQL t1 = new TicketsDAOPGSQL();
             List<Tickets> t_list = t1.GetAll();
             t_list.ForEach((_) => Console.WriteLine(_));
-
+            FlightCenterSystem flightCenter = FlightCenterSystem.GetInstance();
+            
          }
     }
 }

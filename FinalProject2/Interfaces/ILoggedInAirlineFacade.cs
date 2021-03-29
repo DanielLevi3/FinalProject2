@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalProject2
 {
-    interface ILoggedInAirlineFacade
+    public interface ILoggedInAirlineFacade
     {
         IList<Tickets> GetAllTickets(LoginToken<AirlineCompanies> token);
         IList<Flights> GetAllFlights(LoginToken<AirlineCompanies> token);

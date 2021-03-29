@@ -8,6 +8,7 @@ namespace FinalProject2
 {
     public class CountryDAOPGSQL : ICountryDAO
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string conn_string;
         public CountryDAOPGSQL()
         {
@@ -16,43 +17,63 @@ namespace FinalProject2
         }
         private void ExecuteNonQuery(string procedure)
         {
-            using(var conn= new NpgsqlConnection(procedure))
+            try
             {
-                conn.Open();
-                NpgsqlCommand cmd = new NpgsqlCommand(procedure, conn);
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.ExecuteNonQuery();
+                using (var conn = new NpgsqlConnection(conn_string))
+                {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(procedure, conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.CommandText = procedure;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Fatal($"Check your connection to database {ex}");
             }
         }
         public void Add(Country c)
         {
             ExecuteNonQuery($"call sp_add_country('{c.Name}')");
+            log.Info($"There is a new Destination {c.Name}");
         }
 
         public Country GetById(long id)
         {
             Country c = new Country();
-            using (var conn = new NpgsqlConnection(conn_string))
+            try
             {
-                conn.Open();
-
-                using (var cmd = new NpgsqlCommand("sp_get_country_by_id", conn))
+                using (var conn = new NpgsqlConnection(conn_string))
                 {
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new NpgsqlParameter("x", id));
-                    var reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    conn.Open();
+
+                    using (var cmd = new NpgsqlCommand("sp_get_country_by_id", conn))
                     {
-                        c.ID = (long)reader["id"];
-                        c.Name = (string)reader["name"];
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("x", id));
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            c.ID = (long)reader["id"];
+                            c.Name = (string)reader["name"];
+                        }
                     }
                 }
-                }
-            return c;
             }
+            catch(Exception ex)
+            {
+                log.Error($"Something went wrong in GetCountryById {ex} check connection");
+            }
+            return c;
+        }
         public List<Country> GetAll()
         {
             List<Country> c_list = new List<Country>();
+            try
+            {
                 using (var conn = new NpgsqlConnection(conn_string))
                 {
                     conn.Open();
@@ -63,24 +84,30 @@ namespace FinalProject2
 
 
                     var reader = command.ExecuteReader();
-        
+
                     while (reader.Read())
                     {
-                    Country c = new Country();
-                    {
-                        c.ID = (long)reader["id"];
-                        c.Name = (string)reader["name"];
+                        Country c = new Country();
+                        {
+                            c.ID = (long)reader["id"];
+                            c.Name = (string)reader["name"];
+                        }
+                        c_list.Add(c);
                     }
-                    c_list.Add(c);
+
                 }
-             
-                }
+            }
+            catch(Exception ex)
+            {
+                log.Error($"Something went wrong in GetAllCountries {ex} check connection");
+            }
             return c_list;
         } 
 
         public void Remove(long id)
         {
             ExecuteNonQuery($"call sp_remove_country({id})");
+            log.Info($"A country id:{id} has removed");
         }
 
         public void Update(Country c)

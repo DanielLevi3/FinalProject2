@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace FinalProject2
 {
-     class LoginService : ILoginService
+    public class LoginService : ILoginService
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private IAirlineCompanyDAO _arilineDAO;
         private ICustomerDAO _customerDAO;
         private IAdministratorDAO _adminDAO;
@@ -74,7 +75,7 @@ namespace FinalProject2
             }
             catch(WrongCredentialsException ex)
             {
-                Console.WriteLine($"Wrong credentials... Try again {ex}");
+                log.Error($"Wrong credentials... Try again {ex}");
             }
             token = null;
             facade = null;

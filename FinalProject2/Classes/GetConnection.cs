@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalProject2.DAO_s
 {
-     class GetConnection
+     public class GetConnection
     {
         public string getConn= "Host=localhost;Username=postgres;Password=admin;Database=FlightProject";
         public GetConnection()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FinalProject2
 {
-    interface ILoggedInAdministratorFacade
+    public interface ILoggedInAdministratorFacade
     {
         IList<Customers> GetAllCustomers(LoginToken<Administrator> token);
         void CreateNewAirline(LoginToken<Administrator> token, AirlineCompanies airline);
