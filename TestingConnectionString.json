@@ -1,0 +1,3 @@
+{
+  "ConnectionString": "Host=localhost;Username=postgres;Password=admin;Database=TestingFlightProject"
+}

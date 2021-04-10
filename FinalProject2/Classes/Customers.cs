@@ -30,6 +30,18 @@ namespace FinalProject2
             UserId = userId;
         }
 
+        public Customers(long iD, string firstName, string lastName, string address, string phoneNumber, string creditNumber, long userId)
+        {
+            ID = iD;
+            FirstName = firstName;
+            LastName = lastName;
+            Address = address;
+            PhoneNumber = phoneNumber;
+            CreditNumber = creditNumber;
+            UserId = userId;
+            
+        }
+
         public static bool operator ==(Customers c1, Customers c2)
         {
             if (ReferenceEquals(c1, null) && ReferenceEquals(c2, null))

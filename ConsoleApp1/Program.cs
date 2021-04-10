@@ -21,7 +21,7 @@ namespace ConsoleApp1
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
 
-            log.Info("Hello logging world!");
+           // log.Info("Hello logging world!");
 
             Flights f = new Flights();
             FlightsDAOPGSQL f1 = new FlightsDAOPGSQL();
@@ -32,8 +32,7 @@ namespace ConsoleApp1
             // List<Users> u = new List<Users>();
             // u = us1.GetAll();
             //  u.ForEach((_) => Console.WriteLine(_));
-             f = f1.GetById(1);
-            Console.WriteLine(f);
+             
             Console.WriteLine("=======================================");
             /*
              try
@@ -70,10 +69,11 @@ namespace ConsoleApp1
 
             // f1.Add(f_new);
             // f1.Remove(3);
-           Administrator a3 = new Administrator("itay", "Levi", 2, 3);
+           //Administrator a3 = new Administrator("itay", "Levi", 2, 3);
             //a1.Add(a3);
             //  a1.Update(a3);
-            Console.WriteLine("=======================================");
+            //Console.WriteLine("=======================================");
+            /*
             CustomersDAOPGSQL c1 = new CustomersDAOPGSQL();
             List<Customers> c_list = c1.GetAll();
             c_list.ForEach((_) => Console.WriteLine(_));
@@ -90,7 +90,7 @@ namespace ConsoleApp1
             List<Tickets> t_list = t1.GetAll();
             t_list.ForEach((_) => Console.WriteLine(_));
             FlightCenterSystem flightCenter = FlightCenterSystem.GetInstance();
-            
+            */
          }
     }
 }

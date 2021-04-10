@@ -12,8 +12,7 @@ namespace FinalProject2
         private readonly string conn_string;
         public CountryDAOPGSQL()
         {
-            GetConnection g = new GetConnection();
-            conn_string = g.getConn;
+            conn_string = GetConnection.GetTestConn;
         }
         private void ExecuteNonQuery(string procedure)
         {

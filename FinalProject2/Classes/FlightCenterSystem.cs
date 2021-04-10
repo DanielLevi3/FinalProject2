@@ -6,6 +6,7 @@ namespace FinalProject2.Classes
 {
    public class FlightCenterSystem
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private static FlightCenterSystem _Instance;
         private static object key = new object();
         public LoginService _loginService = new LoginService();
@@ -30,13 +31,19 @@ namespace FinalProject2.Classes
         }
         public FacadeBase GetFacade<T>(LoginToken<T> token) where T : IUser
         {
-            if (typeof(T) == typeof(Administrator))
-                return new LoggedInAdministratorFacade();
-            else if (typeof(T) == typeof(Customers))
-                return new LoggedInCustomerFacade();
-            else if (typeof(T) == typeof(AirlineCompanies))
-                return new LoggedInAirlineFacade();
-            else 
+            try
+            {
+                if (typeof(T) == typeof(Administrator))
+                    return new LoggedInAdministratorFacade();
+                else if (typeof(T) == typeof(Customers))
+                    return new LoggedInCustomerFacade();
+                else if (typeof(T) == typeof(AirlineCompanies))
+                    return new LoggedInAirlineFacade();
+            }
+            catch (Exception ex)
+            {
+                log.Error($"There is a problem to get facade check {ex}");
+            }
                 return new AnonymousUserFacade();
         }
        

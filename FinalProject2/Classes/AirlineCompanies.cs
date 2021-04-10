@@ -23,6 +23,15 @@ namespace FinalProject2
             CountryId = countryId;
             UserId = userId;
         }
+
+        public AirlineCompanies(long iD, string name, long countryId, long userId)
+        {
+            ID = iD;
+            Name = name;
+            CountryId = countryId;
+            UserId = userId;
+        }
+
         public static bool operator ==(AirlineCompanies ac1, AirlineCompanies ac2)
         {
             if (ReferenceEquals(ac1, null) && ReferenceEquals(ac2, null))

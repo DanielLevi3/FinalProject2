@@ -36,6 +36,20 @@ namespace FinalProject2
                 _customerDAO.Add(customer);
             }
         }
+        public void CreateNewUser(LoginToken<Administrator> token, Users users)
+        {
+            if (token != null)
+            {
+                _userDAO.Add(users);
+            }
+        }
+        public void CreateNewTicket(LoginToken<Administrator> token, Tickets ticket)
+        {
+            if (token != null)
+            {
+                _ticketDAO.Add(ticket);
+            }
+        }
 
         public IList<Customers> GetAllCustomers(LoginToken<Administrator> token)
         {
