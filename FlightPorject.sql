@@ -17,20 +17,21 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: sp_add_administrator(text, text, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+-- Name: sp_add_administrator(text, text, integer, bigint); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
-CREATE PROCEDURE public.sp_add_administrator(first_name1 text, last_name1 text, level1 integer)
+CREATE PROCEDURE public.sp_add_administrator(first_name1 text, last_name1 text, level1 integer, user_id1 bigint)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    insert into administrators(first_name,last_name,level)
-    values(first_name1,last_name1,level1);
+    insert into administrators(first_name,last_name,level,user_id)
+    values(first_name1,last_name1,level1,user_id1);
+    
     END;
 $$;
 
 
-ALTER PROCEDURE public.sp_add_administrator(first_name1 text, last_name1 text, level1 integer) OWNER TO postgres;
+ALTER PROCEDURE public.sp_add_administrator(first_name1 text, last_name1 text, level1 integer, user_id1 bigint) OWNER TO postgres;
 
 --
 -- Name: sp_add_airlinecompanies(text, bigint, bigint); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -132,12 +133,12 @@ ALTER PROCEDURE public.sp_add_users(username1 text, password1 text, email1 text,
 -- Name: sp_get_administrator_by_id(bigint); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.sp_get_administrator_by_id(x bigint) RETURNS TABLE(id bigint, first_name text, last_name text, level integer)
+CREATE FUNCTION public.sp_get_administrator_by_id(x bigint) RETURNS TABLE(id bigint, first_name text, last_name text, level integer, user_id bigint)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-        return query
-                    select * from administrators a where a.id = x;
+        RETURN QUERY
+                    select * from administrators where administrators.id = x;
     END;
 $$;
 
@@ -198,7 +199,7 @@ ALTER FUNCTION public.sp_get_airlinecompanies_by_username(user_name text) OWNER 
 -- Name: sp_get_all_administrators(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.sp_get_all_administrators() RETURNS TABLE(id bigint, first_name text, last_name text, level integer)
+CREATE FUNCTION public.sp_get_all_administrators() RETURNS TABLE(id bigint, first_name text, last_name text, level integer, user_id bigint)
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -342,12 +343,12 @@ ALTER FUNCTION public.sp_get_customers_by_id(x bigint) OWNER TO postgres;
 -- Name: sp_get_customers_by_username(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.sp_get_customers_by_username(uname text) RETURNS TABLE(id bigint, first_name text, last_name text, address text, phone_no text, credit_card_no text, user_id bigint)
+CREATE FUNCTION public.sp_get_customers_by_username(uname text) RETURNS TABLE(id bigint, first_name text, last_name text, address text, phone_no text, credit_card_no text, userid bigint, username text)
     LANGUAGE plpgsql
     AS $$
 BEGIN
         return query
-                    select c.id,c.first_name,c.last_name,c.address,c.phone_no,c.credit_card_no,c.user_id from customers c inner join users u on c.user_id = u.id where
+                    select c.id,c.first_name,c.last_name,c.address,c.phone_no,c.credit_card_no,c.user_id,u.username from customers c inner join users u on c.user_id = u.id where
                     u.username =Uname;
     END;
 $$;
@@ -449,7 +450,8 @@ CREATE FUNCTION public.sp_get_flights_by_origin_country(o_country bigint) RETURN
     AS $$
 BEGIN
         return query
-                    select f.id,f.airline_company_id,f.origin_country_id,f.destination_country_id,f.departure_time,f.landing_time,f.remaining_tickets from flights f inner join countries c on f.origin_country_id = c.id
+                    select f.id,f.airline_company_id,f.origin_country_id,f.destination_country_id,f.departure_time,
+                           f.landing_time,f.remaining_tickets from flights f inner join countries c on f.origin_country_id = c.id
                     where c.id = o_country;
     END;
 $$;
@@ -488,6 +490,22 @@ $$;
 
 
 ALTER FUNCTION public.sp_get_users_by_id(x bigint) OWNER TO postgres;
+
+--
+-- Name: sp_get_users_by_username(text); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.sp_get_users_by_username(username1 text) RETURNS TABLE(id bigint, username text, password text, email text, user_role bigint)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+        return query
+                    select * from users u where u.username= username1;
+    END;
+$$;
+
+
+ALTER FUNCTION public.sp_get_users_by_username(username1 text) OWNER TO postgres;
 
 --
 -- Name: sp_remove_administrator(bigint); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -550,21 +568,6 @@ $$;
 ALTER PROCEDURE public.sp_remove_customers(id1 bigint) OWNER TO postgres;
 
 --
--- Name: sp_remove_flights(bigint); Type: PROCEDURE; Schema: public; Owner: postgres
---
-
-CREATE PROCEDURE public.sp_remove_flights(id1 bigint)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-       delete from flights where id=id1;
-    END;
-$$;
-
-
-ALTER PROCEDURE public.sp_remove_flights(id1 bigint) OWNER TO postgres;
-
---
 -- Name: sp_remove_tickets(bigint); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
@@ -595,19 +598,19 @@ $$;
 ALTER PROCEDURE public.sp_remove_users(id1 bigint) OWNER TO postgres;
 
 --
--- Name: sp_update_administrator(bigint, text, text, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+-- Name: sp_update_administrator(bigint, text, text, integer, bigint); Type: PROCEDURE; Schema: public; Owner: postgres
 --
 
-CREATE PROCEDURE public.sp_update_administrator(id1 bigint, first_name1 text, last_name1 text, level1 integer)
+CREATE PROCEDURE public.sp_update_administrator(id1 bigint, first_name1 text, last_name1 text, level1 integer, user_id1 bigint)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-       update administrators set first_name=first_name1,last_name=last_name1,level=level1 where id =id1;
+       update administrators set first_name=first_name1,last_name=last_name1,level=level1,user_id=user_id1 where id =id1;
     END;
 $$;
 
 
-ALTER PROCEDURE public.sp_update_administrator(id1 bigint, first_name1 text, last_name1 text, level1 integer) OWNER TO postgres;
+ALTER PROCEDURE public.sp_update_administrator(id1 bigint, first_name1 text, last_name1 text, level1 integer, user_id1 bigint) OWNER TO postgres;
 
 --
 -- Name: sp_update_airlinecompany(bigint, text, bigint, bigint); Type: PROCEDURE; Schema: public; Owner: postgres
@@ -662,7 +665,7 @@ CREATE PROCEDURE public.sp_update_flights(id1 bigint, airline_company_id1 bigint
     LANGUAGE plpgsql
     AS $$
 BEGIN
-       update flights set airline_company_id=airline_company_id1,origin_country_id=origin_country_id1,destination_country_id=destination_country_id1,departure_time=departure1,landing_time=landing1,remaining_tickets=remaining1 where id =id1;
+       update flights set  airline_company_id=airline_company_id1,origin_country_id=origin_country_id1,destination_country_id=destination_country_id1,departure_time=departure1,landing_time=landing1,remaining_tickets=remaining1 where id =id1;
     END;
 $$;
 
@@ -708,7 +711,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.administrators (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     first_name text NOT NULL,
     last_name text NOT NULL,
     level integer NOT NULL,
@@ -1049,8 +1052,9 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.administrators (id, first_name, last_name, level, user_id) FROM stdin;
-1	Ido	Gal	4	2
 2	Daniel	levi	1	1
+1	ido	gal	3	2
+7	itay	Levi	2	3
 \.
 
 
@@ -1096,8 +1100,9 @@ COPY public.customers (id, first_name, last_name, address, phone_no, credit_card
 --
 
 COPY public.flights (id, airline_company_id, origin_country_id, destination_country_id, departure_time, landing_time, remaining_tickets) FROM stdin;
-1	1	2	1	2021-05-15 20:00:00	2021-05-15 22:00:00	20
-2	2	8	7	2021-03-10 16:00:00	2021-03-10 17:15:30	15
+1	1	2	1	2021-05-15 00:00:00	2021-05-15 00:00:00	20
+2	2	8	7	2021-03-10 00:00:00	2021-03-10 00:00:00	15
+3	2	3	5	2020-10-28 20:00:00	2020-12-21 17:00:00	35
 \.
 
 
@@ -1117,9 +1122,8 @@ COPY public.tickets (id, flight_id, customer_id) FROM stdin;
 
 COPY public.user_roles (id, roles_name) FROM stdin;
 1	admin
-2	Regular_administrator
 3	Customer
-4	anonymous_user
+2	airline company
 \.
 
 
@@ -1129,9 +1133,9 @@ COPY public.user_roles (id, roles_name) FROM stdin;
 
 COPY public.users (id, username, password, email, user_role) FROM stdin;
 1	Danilev	0123456	gmail@gmail.com	1
-2	Gid23	01236	gmail2@gmail.com	4
 3	Dobbi4	01342336	gmail3@gmail.com	3
 4	Menah43	0123442336	gmail4@gmail.com	3
+2	Gid23	01236	gmail2@gmail.com	3
 \.
 
 
@@ -1139,7 +1143,7 @@ COPY public.users (id, username, password, email, user_role) FROM stdin;
 -- Name: administrators_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.administrators_id_seq', 3, true);
+SELECT pg_catalog.setval('public.administrators_id_seq', 7, true);
 
 
 --
@@ -1167,7 +1171,7 @@ SELECT pg_catalog.setval('public.customers_id_seq', 14, true);
 -- Name: flights_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.flights_id_seq', 2, true);
+SELECT pg_catalog.setval('public.flights_id_seq', 6, true);
 
 
 --
