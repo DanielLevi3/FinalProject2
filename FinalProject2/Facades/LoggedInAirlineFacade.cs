@@ -11,7 +11,13 @@ namespace FinalProject2
         {
             if(token!=null)
             {
+                if(_flightDAO!=null)
                 _flightDAO.Remove(flight.ID);
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    _flightDAO.Remove(flight.ID);
+                }
             }
         }
 
@@ -22,7 +28,7 @@ namespace FinalProject2
                 if (oldPassword == token.User.User.Password)
                 {
                     token.User.User.Password = newPassword;
-                    Console.WriteLine($"Password has for {token.User.Name} changed");
+                    Console.WriteLine($"Password has changed for {token.User.Name} ");
                 }
                 else
                 {
@@ -36,19 +42,27 @@ namespace FinalProject2
         {
            if(token!=null)
             {
+                if(_flightDAO!=null)
                 _flightDAO.Add(flight);
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    _flightDAO.Add(flight);
+                }
             }
         }
 
         public IList<Flights> GetAllFlights(LoginToken<AirlineCompanies> token)
         { 
             IList<Flights> flights = new List<Flights>();
-            if(token!=null)
+            if (_flightDAO != null)
             {
-                foreach (Flights item in flights)
-                {
-                    _flightDAO.GetById(item.ID);
-                }
+                flights = _flightDAO.GetAll();
+            }
+            else
+            {
+                _flightDAO = new FlightsDAOPGSQL();
+                flights = _flightDAO.GetAll();
             }
             return flights;
         }
@@ -58,7 +72,13 @@ namespace FinalProject2
             List<Tickets> tickets = new List<Tickets>();
             if(token!=null)
             {
-               tickets= _ticketDAO.GetAll();
+                if (_ticketDAO != null)
+                    tickets = _ticketDAO.GetAll();
+                else
+                {
+                    _ticketDAO = new TicketsDAOPGSQL();
+                    tickets = _ticketDAO.GetAll();
+                }
             }
             return tickets;
         }
@@ -67,7 +87,13 @@ namespace FinalProject2
         {
             if(token!= null)
             {
-                _airlineDAO.Update(airline);
+                if (_airlineDAO != null)
+                    _airlineDAO.Update(airline);
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _airlineDAO.Update(airline);
+                }
             }
         }
 
@@ -75,7 +101,13 @@ namespace FinalProject2
         {
             if(token!=null)
             {
+                if(_flightDAO!=null)
                 _flightDAO.Update(flight);
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    _flightDAO.Update(flight);
+                }
             }
         }
     }

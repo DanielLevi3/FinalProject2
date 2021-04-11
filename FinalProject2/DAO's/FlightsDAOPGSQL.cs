@@ -12,13 +12,13 @@ namespace FinalProject2
         private readonly string conn_string;
         public FlightsDAOPGSQL()
         {
-            conn_string = GetConnection.GetTestConn;
+            
         }
         private void ExecuteNonQuery(string procedure)
         {
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(procedure, conn))
@@ -44,7 +44,7 @@ namespace FinalProject2
             Flights f = new Flights();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand("sp_get_flights_by_id", conn))
@@ -79,7 +79,7 @@ namespace FinalProject2
             {
                 using (NpgsqlCommand cmd = new NpgsqlCommand())
                 {
-                    using (cmd.Connection = new NpgsqlConnection(conn_string))
+                    using (cmd.Connection = new NpgsqlConnection(GlobalConfig.GetConn))
                     {
                         cmd.Connection.Open();
                         cmd.CommandType = System.Data.CommandType.Text;
@@ -126,7 +126,7 @@ namespace FinalProject2
             Dictionary<Flights, int> flightVacancy = new Dictionary<Flights, int>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     string sp_name = "sp_get_all_flights";
@@ -160,7 +160,7 @@ namespace FinalProject2
             IList<Flights> f_list = new List<Flights>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -198,7 +198,7 @@ namespace FinalProject2
             List<Flights> f_list = new List<Flights>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand("sp_get_flights_by_destination_country", conn))
@@ -235,7 +235,7 @@ namespace FinalProject2
             IList<Flights> f_list = new List<Flights>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -273,7 +273,7 @@ namespace FinalProject2
             List<Flights> f_list = new List<Flights>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -311,7 +311,7 @@ namespace FinalProject2
             List<Flights> f_list = new List<Flights>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 

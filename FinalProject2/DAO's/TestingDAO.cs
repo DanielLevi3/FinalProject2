@@ -8,15 +8,13 @@ namespace FinalProject2.DAO_s
 {
     public class TestingDAO
     {
-        private string test_conn;
-
         public TestingDAO()
         {
-            test_conn = TestingGetConnection.GetTestConn;
+
         }
         public void ExecuteNonQuery(string procedure)
         {
-                using (var conn = new NpgsqlConnection(test_conn))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
             {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(procedure, conn))

@@ -12,7 +12,13 @@ namespace FinalProject2
             {
                 if (token.User.Level == 3)
                 {
+                    if(_adminDAO!=null)
                     _adminDAO.Add(admin);
+                    else
+                    {
+                        _adminDAO = new AdministratorDAOPGSQL();
+                        _adminDAO.Add(admin);
+                    }
                 }
                 else
                 {
@@ -25,7 +31,13 @@ namespace FinalProject2
         {
             if(token != null)
             {
+                if(_airlineDAO!= null)
               _airlineDAO.Add(airline);
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _airlineDAO.Add(airline);
+                }
             }
         }
 
@@ -33,21 +45,41 @@ namespace FinalProject2
         {
             if(token !=null)
             {
+                if(_customerDAO !=null)
                 _customerDAO.Add(customer);
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    _customerDAO.Add(customer);
+                }
             }
         }
         public void CreateNewUser(LoginToken<Administrator> token, Users users)
         {
             if (token != null)
             {
-                _userDAO.Add(users);
+                if(_userDAO != null)
+                {
+                    _userDAO.Add(users);
+                }
+                else
+                {
+                    _userDAO = new UsersDAOPGSQL();
+                    _userDAO.Add(users);
+                }
             }
         }
         public void CreateNewTicket(LoginToken<Administrator> token, Tickets ticket)
         {
             if (token != null)
             {
+                if(_ticketDAO!=null)
                 _ticketDAO.Add(ticket);
+                else
+                {
+                    _ticketDAO = new TicketsDAOPGSQL();
+                    _ticketDAO.Add(ticket);
+                }
             }
         }
 
@@ -55,8 +87,14 @@ namespace FinalProject2
         {
             IList<Customers> customers = new List<Customers>();
             if (token != null)
-            { 
-                customers = _customerDAO.GetAll();
+            {
+                if (_customerDAO != null)
+                    customers = _customerDAO.GetAll();
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    customers = _customerDAO.GetAll();
+                }
             }
             return customers;
         }
@@ -67,7 +105,13 @@ namespace FinalProject2
             {
                 if( token.User.Level==3)
                 {
+                    if(_adminDAO!=null)
                     _adminDAO.Remove(admin.ID);
+                    else
+                    {
+                        _adminDAO = new AdministratorDAOPGSQL();
+                        _adminDAO.Remove(admin.ID);
+                    }
                 }
                 else
                     Console.WriteLine("Your level of administration is too low, must be level 3 to remove administrator");
@@ -80,7 +124,13 @@ namespace FinalProject2
             {
                 if(token.User.Level>=2)
                 {
+                    if(_airlineDAO!=null)
                     _airlineDAO.Remove(airline.ID);
+                    else
+                    {
+                        _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                        _airlineDAO.Remove(airline.ID);
+                    }
                 }
                 else
                     Console.WriteLine("Your level of administration is too low,you must be level 2 or higher");
@@ -93,7 +143,13 @@ namespace FinalProject2
             {
                 if(token.User.Level>=2)
                 {
+                    if(_customerDAO!=null)
                     _customerDAO.Remove(customer.ID);
+                    else
+                    {
+                        _customerDAO = new CustomersDAOPGSQL();
+                        _customerDAO.Remove(customer.ID);
+                    }
                 }
                 else
                     Console.WriteLine("Your level of administration is too low,you must be level 2 or higher");
@@ -106,7 +162,13 @@ namespace FinalProject2
             {
                 if(token.User.Level==3)
                 {
+                    if(_adminDAO!=null)
                     _adminDAO.Update(admin);
+                    else
+                    {
+                        _adminDAO = new AdministratorDAOPGSQL();
+                        _adminDAO.Update(admin);
+                    }
                 }
                 else
                     Console.WriteLine("Your level of administration is too low, must be level 3 to update administrator");
@@ -117,7 +179,13 @@ namespace FinalProject2
         {
             if(token!= null)
             {
+                if(_airlineDAO!=null)
                 _airlineDAO.Update(airline);
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _airlineDAO.Update(airline);
+                }
             }
         }
 
@@ -125,7 +193,13 @@ namespace FinalProject2
         {
             if(token!=null)
             {
+                if(_customerDAO!=null)
                 _customerDAO.Update(customer);
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    _customerDAO.Update(customer);
+                }
             }
         }
     }

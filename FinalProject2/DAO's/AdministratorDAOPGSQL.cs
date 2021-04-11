@@ -12,13 +12,13 @@ namespace FinalProject2
         private readonly string conn_string;
         public AdministratorDAOPGSQL()
         {
-            conn_string = GetConnection.GetTestConn;
+            
         }
         private void ExecuteNonQuery(string procedure)
         {
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(procedure, conn))
@@ -46,7 +46,7 @@ namespace FinalProject2
             Administrator t = new Administrator();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand("sp_get_administrator_by_id", conn))
@@ -77,7 +77,7 @@ namespace FinalProject2
             List<Administrator> a_list = new List<Administrator>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     string sp_name = "sp_get_all_administrators";

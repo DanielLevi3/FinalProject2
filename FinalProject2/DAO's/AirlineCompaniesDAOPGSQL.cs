@@ -12,13 +12,13 @@ namespace FinalProject2
         private readonly string conn_string;
         public AirlineCompaniesDAOPGSQL()
         {
-            conn_string = GetConnection.GetTestConn;
+            
         }
         private void ExecuteNonQuery(string procedure)
         {
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(procedure, conn))
@@ -36,7 +36,7 @@ namespace FinalProject2
         }
         public void Add(AirlineCompanies ac)
         {
-            ExecuteNonQuery($"call sp_add_airlinecompanies({ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_add_airlinecompanies('{ac.Name}',{ac.CountryId},{ac.UserId})");
             log.Info($"New Airline has added {ac}");
         }
         public AirlineCompanies GetById(long id)
@@ -45,7 +45,7 @@ namespace FinalProject2
             AirlineCompanies ac = new AirlineCompanies();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -76,7 +76,7 @@ namespace FinalProject2
             List<AirlineCompanies> ac_list = new List<AirlineCompanies>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     string sp_name = "sp_get_all_airlinecomapnies";
@@ -117,7 +117,7 @@ namespace FinalProject2
             AirlineCompanies ac = new AirlineCompanies();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -148,7 +148,7 @@ namespace FinalProject2
             List<AirlineCompanies> ac_list = new List<AirlineCompanies>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 

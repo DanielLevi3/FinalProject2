@@ -22,7 +22,7 @@ namespace ConsoleApp1
 
 
            // log.Info("Hello logging world!");
-
+           /*
             Flights f = new Flights();
             FlightsDAOPGSQL f1 = new FlightsDAOPGSQL();
             List<Flights> f_list =f1.GetAll();

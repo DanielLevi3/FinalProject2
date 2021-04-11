@@ -23,6 +23,16 @@ namespace FinalProject2
             Email = email;
             UserRole = userRole;
         }
+
+        public Users(long iD, string userName, string password, string email, long userRole)
+        {
+            ID = iD;
+            UserName = userName;
+            Password = password;
+            Email = email;
+            UserRole = userRole;
+        }
+
         public static bool operator ==(Users u1, Users u2)
         {
             if (ReferenceEquals(u1, null) && ReferenceEquals(u2, null))

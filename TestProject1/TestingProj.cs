@@ -1,4 +1,5 @@
 using FinalProject2;
+using FinalProject2.DAO_s;
 using FinalProject2.Facades;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -11,8 +12,13 @@ namespace TestProject1
         TestingFacade testingFacade = new TestingFacade();
         LoggedInAirlineFacade loggedInAirline = new LoggedInAirlineFacade();
         LoggedInAdministratorFacade LoggedInAdministrator = new LoggedInAdministratorFacade();
-        
+       
         [TestInitialize]
+        public void ChangeConn()
+        {
+            GlobalConfig.SetTestCon();
+            ClearDB();
+        }
         public void ClearDB()
         {
             testingFacade.ClearDB();
@@ -22,24 +28,24 @@ namespace TestProject1
         {
             LoginToken<Administrator> admin = new LoginToken<Administrator>()
             {
-                User = new Administrator("Admin", "Test", 3, 20)
+                User = new Administrator(0,"Admin", "Test", 3,0,new Users(0,"admin","Test","@",1))
             };
-            LoggedInAdministrator.CreateNewUser(admin, new Users("admin1", "pass", "something@gmail.com", 1));
-            LoggedInAdministrator.CreateNewUser(admin, new Users("admin2", "pass", "something@gmail.com", 2));
-            LoggedInAdministrator.CreateNewUser(admin, new Users("airline1", "pass", "something@gmail.com", 3));
-            LoggedInAdministrator.CreateNewUser(admin, new Users("airline2", "pass", "something@gmail.com", 4));
-            LoggedInAdministrator.CreateNewUser(admin, new Users("customer1", "pass", "something@gmail.com", 5));
-            LoggedInAdministrator.CreateNewUser(admin, new Users("customer2", "pass", "something@gmail.com", 6));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(1,"admin1", "pass", "something@gmail.com",1));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(2,"admin2", "pass", "something1@gmail.com", 1));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(3,"airline1", "pass", "something2@gmail.com", 2));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(4,"airline2", "pass", "something3@gmail.com", 2));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(5,"customer1", "pass", "something4@gmail.com", 3));
+            LoggedInAdministrator.CreateNewUser(admin, new Users(6,"customer2", "pass", "something5@gmail.com", 3));
 
             LoggedInAdministrator.CreateAdmin(admin, new Administrator(1,"simi", "simi", 2, 1));
             LoggedInAdministrator.CreateAdmin(admin, new Administrator(2,"bibi", "simi", 3, 2));
             LoggedInAdministrator.CreateNewAirline(admin,new AirlineCompanies(1,"airone",3,3));
             LoggedInAdministrator.CreateNewAirline(admin, new AirlineCompanies(2,"airtwo", 5, 4));
-            LoggedInAdministrator.CreateNewCustomer(admin, new Customers(1,"cus", "tomer", "ytl2", "03-234234234", "2131313", 5));
-            LoggedInAdministrator.CreateNewCustomer(admin, new Customers(2,"cusw", "tomerw", "ytle3", "03-234234234", "23131313", 6));
+            LoggedInAdministrator.CreateNewCustomer(admin, new Customers(1,"cus", "tomer", "ytl2", "03-23423400234", "2131313", 5));
+            LoggedInAdministrator.CreateNewCustomer(admin, new Customers(2,"cusw", "tomerw", "ytle3", "03-234546234234", "231313113", 6));
 
-            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(1,3, 3, 6, DateTime.Now, new DateTime(2021,04,26), 10));
-            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(2,4, 5, 2, DateTime.Now, new DateTime(2021, 04, 17), 23));
+            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(1,1, 3, 6, DateTime.Now, new DateTime(2021,04,26), 10));
+            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(2,2, 5, 2, DateTime.Now, new DateTime(2021, 04, 17), 23));
             LoggedInAdministrator.CreateNewTicket(admin, new Tickets(1, 1));
             LoggedInAdministrator.CreateNewTicket(admin, new Tickets(2, 2));
 

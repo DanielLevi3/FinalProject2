@@ -11,7 +11,7 @@ namespace FinalProject2.Facades
 
         public void ClearDB()
         {
-            testingDAO.ExecuteNonQuery("sp_delete_all_tables");
+            testingDAO.ExecuteNonQuery("call sp_delete_all_tables()");
         }
     }
 }

@@ -7,20 +7,25 @@ using System.Text;
 
 namespace FinalProject2.DAO_s
 {
-    public static class GetConnection
+    public static class GlobalConfig
     {
-      
         private static ConfigJson config;
 
-        static GetConnection()
+         static  GlobalConfig()
         {
+
             string configFile = File.ReadAllText("C:\\Users\\levid\\source\\repos\\FinalProject2\\ConnectionString.json");
             config = JsonConvert.DeserializeObject<ConfigJson>(configFile);
         }
-       
-        public static string GetTestConn { get { return TestingGetConnection.GetTestConn; } }
-        public static string GetConn { get { return config.ConnectionString; } }
-       
+          public static void SetTestCon()
+        {
+
+            string configFile = File.ReadAllText("C:\\Users\\levid\\source\\repos\\FinalProject2\\TestingConnectionString.json");
+            config = JsonConvert.DeserializeObject<ConfigJson>(configFile);
+            
+        }
+        public static string GetConn { get {return config.ConnectionString; } }
+
     }
 }
    

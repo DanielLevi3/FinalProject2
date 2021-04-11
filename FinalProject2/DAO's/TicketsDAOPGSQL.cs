@@ -12,13 +12,13 @@ namespace FinalProject2
         private readonly string conn_string;
         public TicketsDAOPGSQL()
         {
-            conn_string = GetConnection.GetTestConn;
+            
         }
         private void ExecuteNonQuery(string procedure)
         {
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(procedure, conn))
@@ -44,7 +44,7 @@ namespace FinalProject2
             Tickets t = new Tickets();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
 
@@ -74,7 +74,7 @@ namespace FinalProject2
             List<Tickets> t_list = new List<Tickets>();
             try
             {
-                using (var conn = new NpgsqlConnection(conn_string))
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
                     string sp_name = "sp_get_all_tickets";

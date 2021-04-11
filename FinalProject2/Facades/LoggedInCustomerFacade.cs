@@ -10,7 +10,13 @@ namespace FinalProject2
         {
             if(token!=null)
             {
+                if(_ticketDAO!=null)
                 _ticketDAO.Remove(ticket.ID);
+                else
+                {
+                    _ticketDAO = new TicketsDAOPGSQL();
+                    _ticketDAO.Remove(ticket.ID);
+                }
             }
         }
 
@@ -19,7 +25,13 @@ namespace FinalProject2
             IList<Flights> flights = new List<Flights>();
             if(token!=null)
             {
+                if(_flightDAO!=null)
               flights = _flightDAO.GetAll();
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    flights = _flightDAO.GetAll();
+                }
             }
             return flights;
         }
