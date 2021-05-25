@@ -9,7 +9,6 @@ namespace FinalProject2
     public class AirlineCompaniesDAOPGSQL : IAirlineCompanyDAO
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly string conn_string;
         public AirlineCompaniesDAOPGSQL()
         {
             
@@ -110,7 +109,7 @@ namespace FinalProject2
         }
         public void Update(AirlineCompanies ac)
         {
-            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},{ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},{ac.Name},{ac.CountryId},{ac.UserId})");
         }
         public AirlineCompanies GetAirlineByUserame(string u_name)
         {

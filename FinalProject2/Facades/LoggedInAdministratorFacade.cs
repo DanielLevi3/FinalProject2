@@ -202,5 +202,51 @@ namespace FinalProject2
                 }
             }
         }
+        public AirlineCompanies GetAirlineById(LoginToken<Administrator> token, int id)
+        {
+            AirlineCompanies air = new AirlineCompanies();
+            if (token != null)
+            {
+                if (_airlineDAO != null)
+                    air = _airlineDAO.GetById(id);
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    air = _airlineDAO.GetById(id);
+                }
+            }
+            return air;
+        }
+        public Customers GetCustomerById(LoginToken<Administrator> token, int id)
+        {
+            Customers c = new Customers();
+            if (token != null)
+            {
+                if (_customerDAO != null)
+                    c = _customerDAO.GetById(id);
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    c = _customerDAO.GetById(id);
+                }
+            }
+            return c;
+        }
+        public Administrator GetAdministratorById(LoginToken<Administrator> token, int id)
+        {
+            Administrator a = new Administrator();
+            if (token != null)
+            {
+                if (_adminDAO!= null)
+                    a = _adminDAO.GetById(id);
+                else
+                {
+                    _adminDAO = new AdministratorDAOPGSQL();
+                    a = _adminDAO.GetById(id);
+                }
+            }
+            return a;
+        }
+
     }
 }

@@ -44,8 +44,8 @@ namespace TestProject1
             LoggedInAdministrator.CreateNewCustomer(admin, new Customers(1,"cus", "tomer", "ytl2", "03-23423400234", "2131313", 5));
             LoggedInAdministrator.CreateNewCustomer(admin, new Customers(2,"cusw", "tomerw", "ytle3", "03-234546234234", "231313113", 6));
 
-            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(1,1, 3, 6, DateTime.Now, new DateTime(2021,04,26), 10));
-            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(2,2, 5, 2, DateTime.Now, new DateTime(2021, 04, 17), 23));
+            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(1,1, 3, 6, new DateTime(2021,03, 26), new DateTime(2021,04,26), 10));
+            loggedInAirline.CreateFlight(new LoginToken<AirlineCompanies>(), new Flights(2,2, 5, 2, new DateTime(2021, 01, 17), new DateTime(2021, 04, 17), 23));
             LoggedInAdministrator.CreateNewTicket(admin, new Tickets(1, 1));
             LoggedInAdministrator.CreateNewTicket(admin, new Tickets(2, 2));
 

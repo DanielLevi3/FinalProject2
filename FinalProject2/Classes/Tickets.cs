@@ -21,6 +21,12 @@ namespace FinalProject2
             CustomerID = customerID;
             FlightID = flightID;
         }
+
+        public Tickets(long iD, long customerID, long flightID) : this(iD, customerID)
+        {
+            FlightID = flightID;
+        }
+
         public static bool operator ==(Tickets t1, Tickets t2)
         {
             if (ReferenceEquals(t1, null) && ReferenceEquals(t2, null))

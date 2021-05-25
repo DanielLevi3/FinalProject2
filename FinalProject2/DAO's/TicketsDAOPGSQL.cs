@@ -9,7 +9,6 @@ namespace FinalProject2
     public class TicketsDAOPGSQL : ITicketsDAO
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly string conn_string;
         public TicketsDAOPGSQL()
         {
             
@@ -84,9 +83,11 @@ namespace FinalProject2
                     while (reader.Read())
                     {
                         Tickets t = new Tickets();
-                        t.ID = (long)reader["id"];
-                        t.CustomerID = (long)reader["customer_id"];
-                        t.FlightID = (long)reader["flight_id"];
+                        {
+                            t.ID = (long)reader["id"];
+                            t.CustomerID = (long)reader["customer_id"];
+                            t.FlightID = (long)reader["flight_id"];
+                        }
                         t_list.Add(t);
                     }
                 }

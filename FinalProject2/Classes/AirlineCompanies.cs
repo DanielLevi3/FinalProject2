@@ -32,6 +32,11 @@ namespace FinalProject2
             UserId = userId;
         }
 
+        public AirlineCompanies(long iD, string name, long countryId, long userId, Users user) : this(iD, name, countryId, userId)
+        {
+            User = user;
+        }
+
         public static bool operator ==(AirlineCompanies ac1, AirlineCompanies ac2)
         {
             if (ReferenceEquals(ac1, null) && ReferenceEquals(ac2, null))

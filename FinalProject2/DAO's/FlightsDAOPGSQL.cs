@@ -9,7 +9,6 @@ namespace FinalProject2
     public class FlightsDAOPGSQL : IFlightDAO
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly string conn_string;
         public FlightsDAOPGSQL()
         {
             
@@ -118,7 +117,7 @@ namespace FinalProject2
 
         public void Update(Flights f)
         { 
-            ExecuteNonQuery($"call sp_update_flights({f.ID},{f.LandingTime},{f.OriginCountryId},{f.RemainingTickets},{f.DestinationCountryId},{f.DepartureTime},{f.AirlineCompanyId})");
+            ExecuteNonQuery($"call sp_update_flights({f.ID},{f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets}");
         }
 
         public Dictionary<Flights, int> GetAllFlightsVacancy()

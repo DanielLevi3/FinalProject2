@@ -6,10 +6,10 @@ namespace FinalProject2
     public class LoginService : ILoginService
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private IAirlineCompanyDAO _arilineDAO;
-        private ICustomerDAO _customerDAO;
-        private IAdministratorDAO _adminDAO;
-        private IUserDAO _userDAO;
+        private IAirlineCompanyDAO _arilineDAO = new AirlineCompaniesDAOPGSQL();
+        private ICustomerDAO _customerDAO = new CustomersDAOPGSQL();
+        private IAdministratorDAO _adminDAO = new AdministratorDAOPGSQL();
+        private IUserDAO _userDAO =new UsersDAOPGSQL();
         public bool TryLogin(string userName, string password, out LoginToken<IUser> token, out FacadeBase facade)
         {
             token = new LoginToken<IUser>();

@@ -42,6 +42,11 @@ namespace FinalProject2
             
         }
 
+        public Customers(long iD, string firstName, string lastName, string address, string phoneNumber, string creditNumber, long userId, Users user) : this(iD, firstName, lastName, address, phoneNumber, creditNumber, userId)
+        {
+            User = user;
+        }
+
         public static bool operator ==(Customers c1, Customers c2)
         {
             if (ReferenceEquals(c1, null) && ReferenceEquals(c2, null))

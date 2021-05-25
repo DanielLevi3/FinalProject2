@@ -110,5 +110,20 @@ namespace FinalProject2
                 }
             }
         }
+        public AirlineCompanies GetAirlineById(LoginToken<AirlineCompanies> token,int id)
+        {
+            AirlineCompanies air = new AirlineCompanies();
+            if (token != null)
+            {
+                if (_airlineDAO != null)
+                    air = _airlineDAO.GetById(id);
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    air = _airlineDAO.GetById(id);
+                }
+            }
+            return air;
+        }
     }
 }
