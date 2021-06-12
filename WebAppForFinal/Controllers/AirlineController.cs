@@ -14,23 +14,26 @@ namespace WebAppForFinal.Controllers
     [ApiController]
     public class AirlineController : ControllerBase
     {
-        /*
+        
         private void AuthenticateAndGetTokenAndGetFacade(out
-         LoginToken<Customers> token_customer, out LoggedInCustomerFacade facade)
+         LoginToken<AirlineCompanies> token_airline, out LoggedInAirlineFacade facade)
         {
 
-            ILoginToken token;
-            LoginService loginService = new LoginService();
-            loginService.TryLogin("AsafCohen", "asafcohen", out token);
+            FacadeBase facade1;
+            LoginToken<IUser> token;
+            FlightCenterSystem.GetInstance._loginService.TryLogin("Danilev", "0123456", out token, out facade1);
 
-            token_customer = token as LoginToken<Customers>;
-            facade = FlightCenterSystem.GetInstance.GetFacade(token_customer) as LoggedInCustomerFacade;
+           
+
+            token_airline = (IUser)token as LoginToken<AirlineCompanies>;
+            facade1 = FlightCenterSystem.GetInstance.GetFacade(token_airline);
+            facade = facade1 as LoggedInAirlineFacade;
         }
 
         [HttpGet("getallflights/")]
         public async Task<ActionResult<Flights>> GetAllFlights()
         {
-            AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompany>
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
                     token_airline, out LoggedInAirlineFacade facade);
 
             IList<Flights> result = null;
@@ -48,6 +51,6 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-        */
+       
     }
 }

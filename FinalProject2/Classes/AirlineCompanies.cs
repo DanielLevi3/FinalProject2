@@ -11,6 +11,8 @@ namespace FinalProject2
         public long CountryId { get; set; }
         public long UserId { get; set; }
         public Users User { get; set; }
+        public long Id { get { return User.ID; } set { } }
+        public string UserName { get { return User.UserName; } set { } }
 
         public AirlineCompanies()
         {

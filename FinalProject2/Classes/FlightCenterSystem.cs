@@ -11,24 +11,7 @@ namespace FinalProject2.Classes
         private static object key = new object();
         public LoginService _loginService = new LoginService();
 
-        //public static FlightsCenterSystem Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //        {
-        //            lock (key_singleton)
-        //            {
-        //                if (instance == null)
-        //                {
-        //                    instance = new FlightsCenterSystem();
-        //                }
-        //            }
-        //        }
-        //        return instance;
-        //    }
-        //}
-
+        
         public static FlightCenterSystem GetInstance
         {
             get
