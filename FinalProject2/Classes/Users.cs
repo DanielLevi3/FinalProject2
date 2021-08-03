@@ -11,6 +11,7 @@ namespace FinalProject2
         public string Password { get; set; }
         public string Email { get; set; }
         public long UserRole { set; get; }
+       
         public Users()
         {
 

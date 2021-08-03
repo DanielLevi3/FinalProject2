@@ -115,5 +115,37 @@ namespace FinalProject2
             ExecuteNonQuery($"call sp_update_administrator({t.ID},'{t.FirstName}','{t.LastName}',{t.Level},{t.User_id})");
             log.Info($"Admin {t} has updated");
         }
+        public Administrator GetAdministratorByUserame(string name)
+        {
+            Administrator a = new Administrator();
+            try
+            {
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
+                {
+                    conn.Open();
+
+                    using (var cmd = new NpgsqlCommand("sp_get_administrators_by_username", conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("uname", name));
+
+                        var reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            a.ID = (long)reader["id"];
+                            a.FirstName = (string)reader["first_name"];
+                            a.LastName = (string)reader["last_name"];
+                            a.Level = (int)reader["level"];
+                            a.User_id = (long)reader["user_id"];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Something went wrong in GetAdministratorByUserame {ex} check connection");
+            }
+            return a;
+        }
     }
 }

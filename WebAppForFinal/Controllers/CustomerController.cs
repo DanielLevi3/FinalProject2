@@ -1,4 +1,5 @@
-﻿using FinalProject2;
+﻿using AutoMapper;
+using FinalProject2;
 using FinalProject2.Classes;
 using FinalProject2.DAO_s;
 using Microsoft.AspNetCore.Http;
@@ -12,20 +13,20 @@ namespace WebAppForFinal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomerController : FlightControllerBase<Customers>
     {
-        private void AuthenticateAndGetTokenAndGetFacade(out
-           LoginToken<Customers> token_customer, out LoggedInCustomerFacade facade)
+        private readonly IMapper m_mapper;
+        public CustomerController(IMapper mapper)
         {
-            
-            LoginToken<IUser> token;
-            FacadeBase facadeBase;
-
-            FlightCenterSystem.GetInstance._loginService.TryLogin("Gid23", "01236", out token,out facadeBase);
-
-            token_customer = (IUser)token as LoginToken<Customers>;
-            facadeBase = FlightCenterSystem.GetInstance.GetFacade(token_customer);
-            facade = facadeBase as LoggedInCustomerFacade;
+            m_mapper = mapper;
+        }
+        private void AuthenticateAndGetTokenAndGetFacade(out
+                      LoginToken<Customers> token_customer, out LoggedInCustomerFacade facade)
+        {
+            token_customer = GetLoginToken();
+            FacadeBase facade1;
+            facade1 = FlightCenterSystem.GetInstance.GetFacade(token_customer);
+            facade = facade1 as LoggedInCustomerFacade;
         }
 
         [HttpGet("getflight/{flightid}")]
@@ -49,6 +50,59 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-       
+        [HttpGet("GetAllFlight/")]
+        public async Task<ActionResult<Flights>> GetAllFlight()
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
+                    token_customer, out LoggedInCustomerFacade facade);
+
+            IList<Flights> result = null;
+            try
+            {
+                result = await Task.Run(() => facade.GetAllMyFlights(token_customer));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+            if (result == null)
+            {
+                return StatusCode(204, "{ }");
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("CancelTicket")]
+        public async Task<ActionResult<Customers>> CancelTicket([FromBody] Tickets ticket)
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
+                     token_customer, out LoggedInCustomerFacade facade);
+            try
+            {
+                await Task.Run(() => facade.CancelTicket(token_customer, ticket));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+
+            return Ok();
+        }
+        [HttpPost("CreateTicket")]
+        public async Task<ActionResult<Customers>> CreateTicket([FromBody] Flights flight)
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
+                     token_customer, out LoggedInCustomerFacade facade);
+            try
+            {
+                await Task.Run(() => facade.PurchaseTicket(token_customer, flight));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+
+            return Ok();
+        }
     }
 }

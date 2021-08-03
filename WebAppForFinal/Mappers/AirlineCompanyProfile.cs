@@ -10,22 +10,23 @@ namespace WebAppForFinal.Mappers
 {
     public class AirlineCompanyProfile : Profile
     {
+        static Dictionary<long, string> map_country_id_to_name = new Dictionary<long, string>();
+        CountryDAOPGSQL countryDAOPGSQL = new CountryDAOPGSQL();
         public AirlineCompanyProfile()
         {
-            // read from db or cache
-            Dictionary<long, string> map_countryid_to_name = new Dictionary<long, string>()
+            List<Country> countries = countryDAOPGSQL.GetAll();
+            foreach (Country country in countries)
             {
-                { 1, "Israel" }
-            };
+                map_country_id_to_name.Add(country.ID, country.Name);
+            }
 
-            // 1. auto each with SAME NAME will be mapped from one object to another
-            // 2. you can customize the mappings!
-            CreateMap<AirlineCompanies, AirlineCompanyDTO>()
-                .ForMember(dest => dest.CountryName,
-                            opt => opt.MapFrom(src => map_countryid_to_name[src.CountryId]))
-                .ForMember(dest => dest.CompanyName,
-                            opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<AirlineCompanies, AirlineCompanyDTO>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ID))
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => map_country_id_to_name[src.CountryId]))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+
         }
-
     }
 }

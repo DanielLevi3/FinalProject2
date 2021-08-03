@@ -118,6 +118,7 @@ namespace WebAppForFinal
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -129,9 +130,13 @@ namespace WebAppForFinal
                 c.DocumentTitle = "Flights Managment System API";
             });
 
+            app.UseCors();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

@@ -30,7 +30,9 @@ namespace FinalProject2
                                 {
                                     if (administrators[b].User_id == users[i].ID)
                                     {
-                                        token.User = administrators[b];
+                                        Administrator admin = administrators[b];
+                                        admin.User = users[i];
+                                        token.User = admin;
                                         facade = new LoggedInAdministratorFacade();
                                         return true;
                                     }
@@ -43,7 +45,9 @@ namespace FinalProject2
                                 {
                                     if (airCompanies[b].UserId == users[i].ID)
                                     {
-                                        token.User = airCompanies[b];
+                                        AirlineCompanies air = airCompanies[b];
+                                        air.User = users[i];
+                                        token.User = air;
                                         facade = new LoggedInAirlineFacade();
                                         return true;
                                     }
@@ -56,7 +60,9 @@ namespace FinalProject2
                                 {
                                     if (customers[b].UserId == users[i].ID)
                                     {
-                                        token.User = customers[b];
+                                        Customers cus = customers[b];
+                                        cus.User= users[i];
+                                        token.User = cus;
                                         facade = new LoggedInCustomerFacade();
                                         return true;
                                     }
@@ -68,7 +74,8 @@ namespace FinalProject2
                 }
                 else
                 {
-                    token.User = new Administrator();
+                    Administrator a = new Administrator();
+                    token.User = a;
                     facade = new LoggedInAdministratorFacade();
                 }
 
@@ -78,7 +85,7 @@ namespace FinalProject2
                 log.Error($"Wrong credentials... Try again {ex}");
             }
             token = null;
-            facade = null;
+            facade = new AnonymousUserFacade();
             return false;
 
         }

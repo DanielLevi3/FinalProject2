@@ -8,19 +8,8 @@ namespace FinalProject2.DTO_s
     {
         public long Id;
         public string CompanyName;
-        public string CountryId;
         public string CountryName;
-
-        /*
-         * source
-        public class AirlineCompany
-        {
-            public long Id;
-            public string Name;
-            public string Password;
-            public int CountryId;
-
-        }
-        */
+        public long UserId;
+        public Users User;
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using FinalProject2.DTO_s;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace FinalProject2
 {
-    public class AnonymousUserFacade : FacadeBase,IAnonymousUserFacade
+    public class AnonymousUserFacade : FacadeBase, IAnonymousUserFacade
     {
         public IList<AirlineCompanies> GetAllAirlineCompanies()
         {
@@ -24,11 +25,11 @@ namespace FinalProject2
         public IList<Flights> GetAllFlights()
         {
             IList<Flights> flights = new List<Flights>();
-            if(_flightDAO != null)
+            if (_flightDAO != null)
                 flights = _flightDAO.GetAll();
             else
             {
-                _flightDAO =new FlightsDAOPGSQL();
+                _flightDAO = new FlightsDAOPGSQL();
                 flights = _flightDAO.GetAll();
             }
             return flights;
@@ -37,8 +38,8 @@ namespace FinalProject2
         public Dictionary<Flights, int> GetAllFlightsVacancy()
         {
             Dictionary<Flights, int> flightVacancy = new Dictionary<Flights, int>();
-            if(_flightDAO!=null)
-               flightVacancy= _flightDAO.GetAllFlightsVacancy();
+            if (_flightDAO != null)
+                flightVacancy = _flightDAO.GetAllFlightsVacancy();
             else
             {
                 _flightDAO = new FlightsDAOPGSQL();
@@ -50,7 +51,7 @@ namespace FinalProject2
         public Flights GetFlightById(int id)
         {
             Flights f = new Flights();
-                if(_flightDAO!=null)
+            if (_flightDAO != null)
                 f = _flightDAO.GetById(id);
             else
             {
@@ -63,7 +64,7 @@ namespace FinalProject2
         public IList<Flights> GetFlightsByDepatrureDate(DateTime departureDate)
         {
             IList<Flights> flights = new List<Flights>();
-            if(_flightDAO!=null)
+            if (_flightDAO != null)
             {
                 flights = _flightDAO.GetFlightsByDepatrureDate(departureDate);
             }
@@ -78,9 +79,9 @@ namespace FinalProject2
         public IList<Flights> GetFlightsByDestinationCountry(int countryCode)
         {
             IList<Flights> flights = new List<Flights>();
-            if(_flightDAO!=null)
+            if (_flightDAO != null)
             {
-                flights= _flightDAO.GetFlightsByDestinationCountry(countryCode);
+                flights = _flightDAO.GetFlightsByDestinationCountry(countryCode);
             }
             else
             {
@@ -108,16 +109,43 @@ namespace FinalProject2
         public IList<Flights> GetFlightsByOriginCountry(int countryCode)
         {
             IList<Flights> flights = new List<Flights>();
-            if(_flightDAO!=null)
+            if (_flightDAO != null)
             {
-                flights= _flightDAO.GetFlightsByOriginCountry(countryCode);
+                flights = _flightDAO.GetFlightsByOriginCountry(countryCode);
             }
             else
             {
                 _flightDAO = new FlightsDAOPGSQL();
-                flights= _flightDAO.GetFlightsByOriginCountry(countryCode);
+                flights = _flightDAO.GetFlightsByOriginCountry(countryCode);
             }
             return flights;
+        }
+
+        // Add to interface
+        public void SignUp(Customers customer)
+        {
+            int user_role = 3;
+            if (_customerDAO != null)
+            {
+                if (customer.User.UserRole == 0)
+                {
+                    customer.User.UserRole = user_role;
+                }
+                _userDAO.Add(customer.User);
+                List<Users> users = _userDAO.GetAll();
+                Users createdUser = users[users.Count - 1];
+                customer.UserId = createdUser.ID;
+               
+                _customerDAO.Add(customer);
+                // check that user is created - if not throw error
+            }
+            else
+            {
+                _userDAO = new UsersDAOPGSQL();
+                _userDAO.Add(customer.User);
+                _customerDAO = new CustomersDAOPGSQL();
+                _customerDAO.Add(customer);
+            }
         }
     }
 }

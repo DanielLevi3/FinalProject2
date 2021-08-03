@@ -27,11 +27,10 @@ namespace WebAppForFinal.Controllers
             // 1 login failed
             //if (loginResult == false)
             //{
+
             bool loginSuccess;
             LoginToken<IUser> token;
-
-          
-             loginSuccess =  FlightCenterSystem.GetInstance._loginService.TryLogin(userDetails.Name, userDetails.Password, out token, out _);
+            loginSuccess =FlightCenterSystem.GetInstance._loginService.TryLogin(userDetails.Name, userDetails.Password, out token, out _); 
            
             if (!loginSuccess)
             {
@@ -60,50 +59,54 @@ namespace WebAppForFinal.Controllers
             // 3) create claim for specific role
             // add claims
             var claims = new List<Claim>();
-            LoginToken<Administrator> token1 = (IUser)token as LoginToken<Administrator>;
-            LoginToken<AirlineCompanies> token2 = (IUser)token as LoginToken<AirlineCompanies>;
-            LoginToken<Customers> token3 = (IUser)token as LoginToken<Customers>;
-
-            string userRole = "";
-
-            if (token1 != null)
+            if (token != null)
             {
-                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
-                claims.Add(new Claim("userid", token1.User.ID.ToString()));
-                claims.Add(new Claim("username", token1.User.User.UserName));
-                userRole = "Administrator";
-            }
-            else if (token2 != null)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "AirlineCompany"));
-                claims.Add(new Claim("userid", token2.User.ID.ToString()));
-                claims.Add(new Claim("username", token2.User.User.UserName));
-                userRole = "AirlineCompany";
+               
+                if (token.User.User.UserRole == 1)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+                    claims.Add(new Claim("userid", token.User.User.ID.ToString()));
+                    claims.Add(new Claim("username", token.User.User.UserName));
+                    claims.Add(new Claim("user_role", token.User.User.UserRole.ToString()));
+                }
+                else if (token.User.User.UserRole == 2)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "AirlineCompany"));
+                    claims.Add(new Claim("userid", token.User.User.ID.ToString()));
+                    claims.Add(new Claim("username", token.User.User.UserName));
+                    claims.Add(new Claim("user_role", token.User.User.UserRole.ToString()));
 
-            }
-            else if (token3 != null)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "Customer"));
-                claims.Add(new Claim("userid", token3.User.ID.ToString()));
-                claims.Add(new Claim("username", token3.User.User.UserName));
-                userRole = "Customer";
-            }
-            else
-            {
-                return Unauthorized("user not recognized");
-            }
+                }
+                else if (token.User.User.UserRole == 3)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Customer"));
+                    claims.Add(new Claim("userid", token.User.User.ID.ToString()));
+                    claims.Add(new Claim("username", token.User.User.UserName));
+                    claims.Add(new Claim("user_role", token.User.User.UserRole.ToString()));
 
+                }
+                else
+                {
+                    return Unauthorized("user not recognized");
+                }
+                
+            }
 
             // 4) create token
-            var jwtToken = new JwtSecurityToken(
-           issuer: "issuer_of_flight_project",
-           audience: "flight_project_users",
-           expires: DateTime.Now.AddDays(14), // TTL configure
-           signingCredentials: signingCredentials,
-           claims: claims);
+           
+            
+                var jwtToken = new JwtSecurityToken(
+                issuer: "issuer_of_flight_project",
+                audience: "flight_project_users",
+                expires: DateTime.Now.AddDays(14), // TTL configure
+                signingCredentials: signingCredentials,
+                claims: claims);
+            
+          
             // 5) return token
-            return Ok(new JwtSecurityTokenHandler().WriteToken(jwtToken));
+           return  Ok(new JwtSecurityTokenHandler().WriteToken(jwtToken));
            
         }
+      
     }
 }
