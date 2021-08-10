@@ -1,4 +1,5 @@
-﻿using FinalProject2.DTO_s;
+﻿using FinalProject2.DAO_s;
+using FinalProject2.DTO_s;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -145,6 +146,52 @@ namespace FinalProject2
                 _userDAO.Add(customer.User);
                 _customerDAO = new CustomersDAOPGSQL();
                 _customerDAO.Add(customer);
+            }
+        }
+        public void SignUpAirline(AirlineCompanies airline)
+        {
+            int user_role = 2;
+            if(_waitingAirlinesDAO != null)
+            {
+                if(airline.User.UserRole== 0 )
+                {
+                    airline.User.UserRole = user_role;
+                }
+                _userDAO.Add(airline.User);
+                List<Users> users = _userDAO.GetAll();
+                Users createdUser = users[users.Count - 1];
+                airline.UserId = createdUser.ID;
+                _waitingAirlinesDAO.Add(airline);
+            }
+            else
+            {
+                _userDAO = new UsersDAOPGSQL();
+                _userDAO.Add(airline.User);
+                _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                _waitingAirlinesDAO.Add(airline);
+            }
+        }
+        public void SignUpAdmin(Administrator admin)
+        {
+            int user_role = 1;
+            if (_adminDAO != null)
+            {
+                if (admin.User.UserRole == 0)
+                {
+                    admin.User.UserRole = user_role;
+                }
+                _userDAO.Add(admin.User);
+                List<Users> users = _userDAO.GetAll();
+                Users createdUser = users[users.Count - 1];
+                admin.User_id = createdUser.ID;
+                _adminDAO.Add(admin);
+            }
+            else
+            {
+                _userDAO = new UsersDAOPGSQL();
+                _userDAO.Add(admin.User);
+                _adminDAO = new AdministratorDAOPGSQL();
+                _adminDAO.Add(admin);
             }
         }
     }

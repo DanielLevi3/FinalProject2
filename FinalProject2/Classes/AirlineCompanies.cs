@@ -65,8 +65,15 @@ namespace FinalProject2
 
         public override bool Equals(object obj)
         {
-            AirlineCompanies other = (AirlineCompanies)obj;
-            return this.ID == other.ID;
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                AirlineCompanies air = (AirlineCompanies)obj;
+                return this.ID == air.ID;
+            }
         }
 
         public override int GetHashCode()

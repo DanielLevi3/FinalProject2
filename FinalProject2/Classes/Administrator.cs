@@ -68,8 +68,16 @@ namespace FinalProject2
 
         public override bool Equals(object obj)
         {
-            Administrator other = (Administrator)obj;
-            return this.ID == other.ID;
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Administrator other = (Administrator)obj;
+                return this.ID == other.ID;
+            }
+           
         }
 
         public override int GetHashCode()

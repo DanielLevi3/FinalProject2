@@ -307,6 +307,23 @@ namespace WebAppForFinal.Controllers
 
             return Ok();
         }
+        [HttpDelete("DeleteWaitingAirline")]
+        public async Task<ActionResult<Administrator>> RemoveWaitingAirline([FromBody] AirlineCompanies airlineCompany)
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
+                    token_admin, out LoggedInAdministratorFacade facade);
+
+            try
+            {
+                await Task.Run(() => facade.RemoveWaitingAirline(token_admin, airlineCompany));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+
+            return Ok();
+        }
 
         // POST api/<AdminController>
         //[HttpPost("AddNewAirline")]

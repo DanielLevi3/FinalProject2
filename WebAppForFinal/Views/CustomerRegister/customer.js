@@ -201,8 +201,8 @@ function signUp(e) {
        firstName: $('#first_name').val(), 
        lastName: $('#last_name').val(),
        address: $('#address').val(),
-       phone_number: $('#contact_no').val(),
-       credit: $("#credit").val(),
+       PhoneNumber: $('#contact_no').val(),
+       CreditNumber: $("#credit").val(),
        user:
        {
            userName:$("#user_name").val(),
@@ -222,14 +222,24 @@ function signUp(e) {
    let jqXhr = $.ajax({
        url: "https://localhost:44395/api/Anonymous/SignUp",
        type: "POST",
-       data:customerJson,
+       data: customerJson,
        dataType: "json",
-       contentType: "application/json; charset=utf-8",
-       error: function(e) {
-           console.log("didnt work")
-         console.log(e);
-       }
-     });
+       contentType: "application/json",
+    }).done(function (result) {
+        console.log("action taken: " + result.success);
+        return result;
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("failed: ");
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+
+    });
+
+
+
+
+
 //        contentType: "application/json; charset=utf-8",  
 //        dataType: "json",  
 //        success: function(response) {  
@@ -262,4 +272,4 @@ function signUp(e) {
     //   })
    
    
-   }
+}

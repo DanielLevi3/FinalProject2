@@ -1,4 +1,5 @@
-﻿    using System;
+﻿using FinalProject2.DAO_s;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -247,6 +248,79 @@ namespace FinalProject2
             }
             return a;
         }
-
+        public void AddAirlineToWaitingTable(LoginToken<Administrator> token, AirlineCompanies airline)
+        {
+            if (token != null)
+            {
+                if (_waitingAirlinesDAO != null)
+                    _waitingAirlinesDAO.Add(airline);
+                else
+                {
+                    _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                    _waitingAirlinesDAO.Add(airline);
+                }
+            }
+        }
+        public AirlineCompanies GetWaitingAirlineById(LoginToken<Administrator> token, int id)
+        {
+            AirlineCompanies air = new AirlineCompanies();
+            if (token != null)
+            {
+                if (_waitingAirlinesDAO != null)
+                    air = _waitingAirlinesDAO.GetById(id);
+                else
+                {
+                    _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                    air = _waitingAirlinesDAO.GetById(id);
+                }
+            }
+            return air;
+        }
+        public void RemoveWaitingAirline(LoginToken<Administrator> token, AirlineCompanies airline)
+        {
+            if (token != null)
+            {
+                if (token.User.Level >= 2)
+                {
+                    if (_waitingAirlinesDAO != null)
+                        _waitingAirlinesDAO.Remove(airline.ID);
+                    else
+                    {
+                        _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                        _waitingAirlinesDAO.Remove(airline.ID);
+                    }
+                }
+                else
+                    Console.WriteLine("Your level of administration is too low,you must be level 2 or higher");
+            }
+        }
+        public void UpdateWaitingAirlineDetails(LoginToken<Administrator> token, AirlineCompanies airline)
+        {
+            if (token != null)
+            {
+                if (_waitingAirlinesDAO != null)
+                    _waitingAirlinesDAO.Update(airline);
+                else
+                {
+                    _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                    _waitingAirlinesDAO.Update(airline);
+                }
+            }
+        }
+        public IList<AirlineCompanies> GetAllWaitingAirlines(LoginToken<Administrator> token)
+        {
+            IList<AirlineCompanies> airlines = new List<AirlineCompanies>();
+            if (token != null)
+            {
+                if (_waitingAirlinesDAO != null)
+                    airlines = _waitingAirlinesDAO.GetAll();
+                else
+                {
+                    _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
+                    airlines = _waitingAirlinesDAO.GetAll();
+                }
+            }
+            return airlines;
+        }
     }
 }

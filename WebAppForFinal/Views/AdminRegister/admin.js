@@ -1,99 +1,42 @@
-$(document).ready(function() {
-    $('#contact_form').bootstrapValidator({
-        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            first_name: {
-                validators: {
-                        stringLength: {
-                        min: 2,
-                    },
-                        notEmpty: {
-                        message: 'Please enter your First Name'
-                    }
-                }
-            },
-             last_name: {
-                validators: {
-                     stringLength: {
-                        min: 2,
-                    },
-                    notEmpty: {
-                        message: 'Please enter your Last Name'
-                    }
-                }
-            },
-			 user_name: {
-                validators: {
-                     stringLength: {
-                        min: 8,
-                    },
-                    notEmpty: {
-                        message: 'Please enter your Username'
-                    }
-                }
-            },
-			 user_password: {
-                validators: {
-                     stringLength: {
-                        min: 8,
-                    },
-                    notEmpty: {
-                        message: 'Please enter your Password'
-                    }
-                }
-            },
-           
-			confirm_password: {
-                validators: {
-                     stringLength: {
-                        min: 8,
-                    },
-                    notEmpty: {
-                        message: 'Please confirm your Password'
-                    }
-                }
-            },
-            email: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please enter your Email Address'
-                    },
-                    emailAddress: {
-                        message: 'Please enter a valid Email Address'
-                    }
-                }
-            },
-            level: {
-                validators: {
-                    notEmpty: {
-                        message: 'Please select your Country'
-                    }
-                }
-            },
+        function signUp(e) {
+    
+    
+            // create new customer object
+            let admin = 
+            {
+                firstName: $('#first_name').val(), 
+                lastName: $('#last_name').val(),
+                level: $('#level').val(),
+                user:
+                {
+                    userName:$("#user_name").val(),
+                    password:$("#user_password").val(),
+                    email:$("#email").val(),
                 }
             }
-        })
-        .on('success.form.bv', function(e) {
-            $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
-                $('#contact_form').data('bootstrapValidator').resetForm();
-
-            // Prevent form submission
+         
+            //fire ajax request
             e.preventDefault();
-
-            // Get the form instance
-            var $form = $(e.target);
-
-            // Get the BootstrapValidator instance
-            var bv = $form.data('bootstrapValidator');
-
-            // Use Ajax to submit form data
-            $.post($form.attr('action'), $form.serialize(), function(result) {
-                console.log(result);
-            }, 'json');
-        });
-});
+         
+            console.log(admin);
+            console.log(JSON.stringify(admin));
+            let adminJson =JSON.stringify(admin); 
+         
+            let jqXhr = $.ajax({
+                url: "https://localhost:44395/api/Anonymous/SignUpAdmin",
+                type: "POST",
+                data: adminJson,
+                dataType: "json",
+                contentType: "application/json",
+             }).done(function (result) {
+                 console.log("action taken: " + result.success);
+                 return result;
+             }).fail(function (jqXHR, textStatus, errorThrown) {
+                 console.log("failed: ");
+                 console.log(jqXHR);
+                 console.log(textStatus);
+                 console.log(errorThrown);
+         
+             });
+         }
+     

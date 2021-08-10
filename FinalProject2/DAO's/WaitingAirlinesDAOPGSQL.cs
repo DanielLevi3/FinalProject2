@@ -1,17 +1,17 @@
-﻿using FinalProject2.DAO_s;
+﻿using FinalProject2.Interfaces;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FinalProject2
+namespace FinalProject2.DAO_s
 {
-    public class AirlineCompaniesDAOPGSQL : IAirlineCompanyDAO
+   public class WaitingAirlinesDAOPGSQL: IWaitingAirlinesDAO
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        public AirlineCompaniesDAOPGSQL()
+        public WaitingAirlinesDAOPGSQL()
         {
-            
+
         }
         private void ExecuteNonQuery(string procedure)
         {
@@ -35,7 +35,7 @@ namespace FinalProject2
         }
         public void Add(AirlineCompanies ac)
         {
-            ExecuteNonQuery($"call sp_add_airlinecompanies('{ac.Name}',{ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_add_airlinecompanies_to_waiting('{ac.Name}',{ac.CountryId},{ac.UserId})");
             log.Info($"New Airline has added {ac}");
         }
         public AirlineCompanies GetById(long id)
@@ -48,7 +48,7 @@ namespace FinalProject2
                 {
                     conn.Open();
 
-                    using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_id", conn))
+                    using (var cmd = new NpgsqlCommand("sp_get_waiting_airlinecompanies_by_id", conn))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new NpgsqlParameter("x", id));
@@ -64,7 +64,7 @@ namespace FinalProject2
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error($"Something went wrong in GetAirlineCompaniesById {ex} check connection");
             }
@@ -78,7 +78,7 @@ namespace FinalProject2
                 using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
                 {
                     conn.Open();
-                    string sp_name = "sp_get_all_airlinecomapnies";
+                    string sp_name = "sp_get_all_waiting_airlinecomapnies";
                     NpgsqlCommand command = new NpgsqlCommand(sp_name, conn);
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     var reader = command.ExecuteReader();
@@ -104,14 +104,14 @@ namespace FinalProject2
         }
         public void Remove(long id)
         {
-            ExecuteNonQuery($"call sp_remove_airlinecompany({id})");
+            ExecuteNonQuery($"call sp_remove_waiting_airlinecompany({id})");
             log.Info($"Airline company with id:{id} has removed");
         }
         public void Update(AirlineCompanies ac)
         {
-            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},{ac.Name},{ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_update_waiting_airlinecompany({ac.ID},{ac.Name},{ac.CountryId},{ac.UserId})");
         }
-        public AirlineCompanies GetAirlineByUserame(string u_name)
+        public AirlineCompanies GetWaitingAirlineByUserame(string u_name)
         {
             AirlineCompanies ac = new AirlineCompanies();
             try
@@ -120,7 +120,7 @@ namespace FinalProject2
                 {
                     conn.Open();
 
-                    using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_username", conn))
+                    using (var cmd = new NpgsqlCommand("sp_get_waiting_airlinecompanies_by_username", conn))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new NpgsqlParameter("user_name", u_name));
@@ -142,7 +142,7 @@ namespace FinalProject2
             }
             return ac;
         }
-        public List<AirlineCompanies> GetAllAirlinesByCountry(long countryId)
+        public List<AirlineCompanies> GetAllWaitingAirlinesByCountry(long countryId)
         {
             List<AirlineCompanies> ac_list = new List<AirlineCompanies>();
             try
@@ -151,7 +151,7 @@ namespace FinalProject2
                 {
                     conn.Open();
 
-                    using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_country_id", conn))
+                    using (var cmd = new NpgsqlCommand("sp_get_waiting_airlinecompanies_by_country_id", conn))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.Add(new NpgsqlParameter("country_id_parm", countryId));
@@ -171,7 +171,7 @@ namespace FinalProject2
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Error($"Something went wrong in GetAllAirlinesByCountry {ex} check connection");
 

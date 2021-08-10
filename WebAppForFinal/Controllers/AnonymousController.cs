@@ -1,4 +1,5 @@
-﻿using FinalProject2;
+﻿using AutoMapper;
+using FinalProject2;
 using FinalProject2.DTO_s;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,13 @@ namespace WebAppForFinal.Controllers
 
     public class AnonymousController : ControllerBase
     {
-       private AnonymousUserFacade facade = new AnonymousUserFacade();
+        private AnonymousUserFacade facade = new AnonymousUserFacade();
+        private readonly IMapper m_mapper;
+
+        public AnonymousController( IMapper mapper)
+        {
+            m_mapper = mapper;
+        }
 
         // GET: api/<AnonymousController>
         [HttpGet("getallairlinecompanies/")]
@@ -256,22 +263,36 @@ namespace WebAppForFinal.Controllers
 
         }
 
-        // POST api/<AnonymousController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SignUpAirline")]
+        public async void SignUpAirline([FromBody] AirlineCompanyDTO airline)
+
         {
+            AirlineCompanies air1 = m_mapper.Map<AirlineCompanies>(airline);
+            try
+            {
+                await Task.Run(() => facade.SignUpAirline(air1));
+                Ok();
+            }
+            catch (Exception ex)
+            {
+                StatusCode(400, $"{{error:\"{ex.Message}\"}}");
+            }
+
+        }
+        [HttpPost("SignUpAdmin")]
+        public async void SignUpAdmin([FromBody] Administrator admin)
+        {
+            try
+            {
+                await Task.Run(() => facade.SignUpAdmin(admin));
+                Ok();
+            }
+            catch (Exception ex)
+            {
+                StatusCode(400, $"{{error:\"{ex.Message}\"}}");
+            }
+
         }
 
-        // PUT api/<AnonymousController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AnonymousController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

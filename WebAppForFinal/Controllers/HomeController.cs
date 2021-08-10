@@ -26,7 +26,7 @@ namespace WebAppForFinal.Controllers
             //         ReadAllText("wwwroot\\loginpage.html");
             //return Content(res, "text/html");
             var res = System.IO.File.
-                     ReadAllText("wwwroot\\login\\login.html");
+                     ReadAllText("Views\\login\\login.html");
             return Content(res, "text/html");
         }
 
@@ -50,6 +50,47 @@ namespace WebAppForFinal.Controllers
                 ReadAllText("Views\\CustomerRegister\\customer.js");
             return Content(res, "text/js");
         }
+
+        public ActionResult AirlineRegister()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AirlineRegister\\airline.html");
+            return Content(res, "text/html");
+        }
+        public ActionResult AirlineRegisterJs()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AirlineRegister\\airline.js");
+            return Content(res, "text/js");
+        }
+        public ActionResult AirlineRegisterCSS()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AirlineRegister\\airline.css");
+            return Content(res, "text/css");
+        }
+       
+        public ActionResult AdminRegister()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AdminRegister\\admin.html");
+            return Content(res, "text/html");
+        }
+        public ActionResult AdminRegisterJs()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AdminRegister\\admin.js");
+            return Content(res, "text/js");
+        }
+
+        public ActionResult AdminRegisterCSS()
+        {
+            var res = System.IO.File.
+                ReadAllText("Views\\AdminRegister\\admin.css");
+            return Content(res, "text/css");
+        }
+
+      
 
         public ActionResult AcceptPagePOST()
         {

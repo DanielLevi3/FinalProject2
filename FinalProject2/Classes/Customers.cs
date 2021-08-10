@@ -75,8 +75,16 @@ namespace FinalProject2
 
         public override bool Equals(object obj)
         {
-            Customers other = (Customers)obj;
-            return this.ID == other.ID;
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Customers other = (Customers)obj;
+                return this.ID == other.ID;
+            }
+           
         }
 
         public override int GetHashCode()
