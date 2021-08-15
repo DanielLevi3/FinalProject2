@@ -130,7 +130,13 @@ namespace WebAppForFinal
                 c.DocumentTitle = "Flights Managment System API";
             });
 
-            app.UseCors();
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
 
             app.UseAuthentication();
 
