@@ -18,6 +18,8 @@ namespace WebAppForFinal
 {
     public class Startup
     {
+        public const string SECURITY_KEY = "this_is_our_supper_long_security_key_for_token_validation_project_2018_09_07$smesk.in";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,18 +30,17 @@ namespace WebAppForFinal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ILoggedInAdministratorFacade, LoggedInAdministratorFacade>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddCors();
             services.AddControllersWithViews();
 
-            // ...
-            //if (MyConfig.UseMicroServices)
-            //   services.AddScoped<IAdminFacade, MicroServiceAdminFacade>();
-            //else
-            services.AddScoped<ILoggedInAdministratorFacade, LoggedInAdministratorFacade>(); // prepare DI
-
-            string securityKey = "this_is_our_supper_long_security_key_for_token_validation_project_2018_09_07$smesk.in";
+            services.AddControllers();
 
             var symmetricSecurityKey = new
-               SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+               SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECURITY_KEY));
 
             services.AddAuthentication(options =>
             {
@@ -53,21 +54,17 @@ namespace WebAppForFinal
                      TokenValidationParameters
                 {
                     //  what to validate
-                    //  what to validate
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateIssuerSigningKey = true,
                     // setup validate data
-                    ValidIssuer = "smesk.in",
-                    ValidAudience = "readers",
+                    ValidIssuer = "issuer_of_flight_project",
+                    ValidAudience = "flight_project_users",
                     IssuerSigningKey = symmetricSecurityKey
                 };
             });
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddSwaggerGen(c =>
-            {
+            services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title =
@@ -93,14 +90,10 @@ namespace WebAppForFinal
                 c.AddSecurityDefinition(securityScheme.Reference.Id,
                  securityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                    {securityScheme, new string[] { }}
-                });
+  {
+    {securityScheme, new string[] { }}
+  });
 
-                // make this work
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -117,11 +110,22 @@ namespace WebAppForFinal
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseStaticFiles();
+            
             app.UseHttpsRedirection();
             
-            app.UseStaticFiles();
-
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(c => {
@@ -130,26 +134,11 @@ namespace WebAppForFinal
                 c.DocumentTitle = "Flights Managment System API";
             });
 
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-            });
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseStaticFiles();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
         }
     }
 }

@@ -19,7 +19,7 @@ namespace WebAppForFinal.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("token")]
-        public async Task<ActionResult> GetToken([FromBody] UserDetailsDTO userDetails)
+        public ActionResult GetToken([FromBody] UserDetailsDTO userDetails)
         {
             // 1) try login, with userDetails
 
@@ -44,12 +44,11 @@ namespace WebAppForFinal.Controllers
 
             // 2) create key
             // security key
-            string securityKey =
-       "this_is_our_supper_long_security_key_for_token_validation_project_2018_09_07$smesk.in";
+
 
             // symmetric security key
             var symmetricSecurityKey = new
-                SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey));
+                SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.SECURITY_KEY));
 
             // signing credentials
             var signingCredentials = new
@@ -65,6 +64,7 @@ namespace WebAppForFinal.Controllers
                 if (token.User.User.UserRole == 1)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+                    //claims.Add(new Claim("Role", "Administrator"));
                     claims.Add(new Claim("userid", token.User.User.ID.ToString()));
                     claims.Add(new Claim("username", token.User.User.UserName));
                     claims.Add(new Claim("user_role", token.User.User.UserRole.ToString()));

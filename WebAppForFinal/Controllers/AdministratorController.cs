@@ -15,7 +15,7 @@ namespace WebAppForFinal.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize (Roles ="Administrator")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
     public class AdministratorController : FlightControllerBase<Administrator>
     {
         private ILoggedInAdministratorFacade m_facade;

@@ -2,6 +2,7 @@
 using FinalProject2;
 using FinalProject2.Classes;
 using FinalProject2.DAO_s;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace WebAppForFinal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Customer")]
     public class CustomerController : FlightControllerBase<Customers>
     {
         private readonly IMapper m_mapper;
