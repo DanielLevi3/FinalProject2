@@ -111,10 +111,16 @@ namespace WebAppForFinal
                 app.UseHsts();
             }
             app.UseStaticFiles();
-            
+
             app.UseHttpsRedirection();
-            
+
             app.UseRouting();
+
+            app.UseCors(builder => builder
+                   .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            );
 
             app.UseAuthentication();
 
@@ -133,11 +139,6 @@ namespace WebAppForFinal
                        "FlightsManagmentSystemWebAPI v1");
                 c.DocumentTitle = "Flights Managment System API";
             });
-
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
 
         }
     }

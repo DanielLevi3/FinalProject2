@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
   import Navbar from './Components/Navbar';
-  import { BrowserRouter, Route } from 'react-router-dom';
+  import { BrowserRouter, Route, Switch } from 'react-router-dom';
   import Home from './Components/Home';
   import Login from './Components/Login';
   import Dashboard from './Components/Dashboard';
+  import Admin from './Components/Admin';
+  import Airline from './Components/Airline';
+  import Customer from './Components/Customer';
   
   class App extends Component {
   render() {
@@ -12,9 +15,14 @@ import React, { Component } from 'react';
         <div className="App">
           <header className="App">
             <Navbar />
-            <Route exact path='/' component={Home} />
-            <Route path='/login' component={Login} />
-            <Route path='/dashboard' component={Dashboard} />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route path='/login' component={Login} />
+              <Route path='/dashboard' component={Dashboard} />
+              <Route path='/admin' component={Admin} />
+              <Route path='/airline' component={Airline} />
+              <Route path='/customer' component={Customer} />
+            </Switch>
           </header>
         </div>
       </BrowserRouter>
