@@ -70,10 +70,13 @@ this.Auth = new UserService();
             <input id="password" type="password" name="Password" placeholder="Password" required onChange={this.handleChange} />
           </div>
           <div>
-            <button type="submit" onClick={this.tryLogin} >Submit
+            <button type="submit" onClick={this.tryLogin} >Login
             </button>
           </div>
         </form>
+        <a href="https://localhost:44395/home/customerregister"><button>RegisterForCustomer</button></a>
+            <a href="https://localhost:44395/home/airlineregister"><button>RegisterForAirline</button></a>      
+            <a href="https://localhost:44395/home/Adminregister"><button>RegisterForAdmin</button></a>
       </div>
     )
   }
