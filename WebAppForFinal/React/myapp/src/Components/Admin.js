@@ -20,6 +20,7 @@ import UserService from './UserService';
 const Admin = () => {
   return (
     <div className="App">
+    <h1>AdminDashboard</h1>
       hey im Admin
      
     </div>

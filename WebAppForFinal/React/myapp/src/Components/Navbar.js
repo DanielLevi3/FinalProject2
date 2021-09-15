@@ -1,5 +1,8 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import MyDetails from './MyDetails';
+import UserService from './UserService';
+import jwtDecode from 'jwt-decode';
 
 
 const Navbar = (props) => {
@@ -9,8 +12,21 @@ const Navbar = (props) => {
     localStorage.clear();
     console.log(localStorage);
   }
+  const MyDets =()=>
+  {
+    <div>
+    {MyDetails}
+    </div>
+  }
   //console.log(props.history)
   /*
+  {
+             AuthService(localStorage.getItem('token')).role == '1' && how to nav between user components
+          //   <div>
+          //     <li><NavLink to="/" >My Details</NavLink></li>
+          //     <li><NavLink to="/" >My Tickets</NavLink></li>
+          //   </div>
+          // }
   setTimeout( () => { 
     props.history.push('/') }, 2000); 
     */
@@ -21,7 +37,15 @@ const Navbar = (props) => {
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/login">Login</NavLink></li>
           <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-          <li><NavLink to="/" onClick={logout}>LogOut</NavLink></li>
+
+          { localStorage.getItem('token') != null &&
+            <li><NavLink to="/" onClick={logout}>LogOut</NavLink></li>
+          }
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "3" &&
+            <li><NavLink to="/customer/Mydetails"> My Details</NavLink></li>
+          }
+
+
         </ul>
       </div>
     </nav> 

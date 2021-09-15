@@ -48,5 +48,22 @@ namespace FinalProject2
             }
             return ticket;
         }
+        public Customers GetCustomerDetails(LoginToken<Customers> token)
+        {
+            Customers c = new Customers();
+            if (token != null)
+            {
+               if(_customerDAO != null)
+                {
+                    c = _customerDAO.GetById(token.User.ID);
+                }
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    c = _customerDAO.GetById(token.User.ID);
+                }
+            }
+            return c;
+        }
     }
 }

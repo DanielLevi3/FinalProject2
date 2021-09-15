@@ -46,7 +46,7 @@ this.Auth = new UserService();
         this.props.history.push('/airline'); // send user to airline page
       }
       else if(this.Auth.decoded.user_role == "3") {
-        this.props.history.push('/customer'); // send user to customer page
+        this.props.history.push('/customer/Mydetails'); // send user to customer page
       }
       else
       {

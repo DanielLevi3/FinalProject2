@@ -52,7 +52,7 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("GetAllFlight/")]
+        [HttpGet("GetAllFlight")]
         public async Task<ActionResult<Flights>> GetAllFlight()
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
@@ -105,6 +105,27 @@ namespace WebAppForFinal.Controllers
             }
 
             return Ok();
+        }
+        [HttpGet("GetCustomerDetails")]
+        public async Task<ActionResult<Customers>> GetCustomerDetails()
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
+                    token_customer, out LoggedInCustomerFacade facade);
+
+            Customers c = new Customers();
+            try
+            {
+                c = await Task.Run(() => facade.GetCustomerDetails(token_customer));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+            if (c == null)
+            {
+                return StatusCode(204, "{ }");
+            }
+            return Ok(c);
         }
     }
 }
