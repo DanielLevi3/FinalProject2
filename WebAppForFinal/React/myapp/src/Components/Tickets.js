@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Customer = () => {
+const Tickets = () => {
   return (
     <div className="App">
 hey im customer
@@ -8,4 +8,4 @@ hey im customer
   );
 }
 
-export default Customer;
+export default Tickets;

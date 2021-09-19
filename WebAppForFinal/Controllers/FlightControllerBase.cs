@@ -54,6 +54,7 @@ namespace WebAppForFinal.Controllers
             {
                 Customers cus = customer.GetCustomerByUserame(userName);
                 cus.User = users.GetById(id);
+                cus.UserId = cus.User.ID;
                 login_token.User = (T)(cus as IUser);
                 return login_token;
             }

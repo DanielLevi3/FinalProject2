@@ -2,6 +2,8 @@ import React, { Component }  from 'react';
 import $ from 'jquery';
 import axios from 'axios';
 import UserService from './UserService';
+import Swal from 'react-bootstrap-sweetalert';
+
 
 class MyDetails extends Component
 {
@@ -9,19 +11,17 @@ class MyDetails extends Component
     super(props);
      this.state =
     {
-      FirstName: "",
-      LastName: "",
-      Address: "",
-      PhoneNumber: "",
-      CreditNumber: "",
-      UserId: "",
-      User:
-      {
-        UserName:"",
-        Password:"",
-        Email:"",
-        UserRole:3
-      }
+      Id:undefined,
+      FirstName: undefined,
+      LastName: undefined,
+      Address: undefined,
+      PhoneNumber: undefined,
+      CreditNumber: undefined,
+      UserId: undefined,
+      UserName: undefined,
+      Password: undefined,
+      Email: undefined,
+      UserRole:3
     }
 this.Auth = new UserService();
 }
@@ -30,21 +30,26 @@ componentDidMount() {
   this.GetCustomerDetails()
 }
 
-//  customer = 
-// {
-//     firstName: thit.state., 
-//     lastName: $('#last_name').val(),
-//     address: $('#address').val(),
-//     PhoneNumber: $('#contact_no').val(),
-//     CreditNumber: $("#credit").val(),
-//     user:
-//     {
-//         userName:$("#user_name").val(),
-//         password:$("#user_password").val(),
-//         email:$("#email").val(),
+handleChange = (e) => {
+  this.setState({ 
+      [e.target.name]: e.target.value 
+  });
+}
 
-//     }
-// }
+UpdateCustomer = async ()=>
+{
+  let jwt = localStorage.getItem("token")
+  await axios.put(
+    'https://localhost:44395/api/Customer/UpdateCustomerDetails',this.state,
+    {headers: {
+            // "Access-Control-Allow-Origin" : "*",
+            "Content-type": "Application/json",
+            "Authorization": `Bearer ${jwt}`
+            }   
+        }
+  )
+  
+}
 
 GetCustomerDetails = async ()=>
 {
@@ -60,25 +65,32 @@ GetCustomerDetails = async ()=>
   )
   .then( res => 
     {
-    if (res.status == 200) {
-
-        // this.setState.FirstName(res.data.FirstName)
-        // this.setState.LastName(res.data.LastName)
-        // this.setState.Address(res.data.Address)
-        // this.setState.PhoneNumber(res.data.PhoneNumber)
-        // this.setState.CreditNumber(res.data.CreditNumber)
-        // this.setState.UserId(res.data.UserId)
-        // this.setState.User(res.data.User)
+    if (res.status == 200) 
+    {
         this.setState({
-          FirstName: res.data.firstName
+          Id:res.data.id,
+          FirstName: res.data.firstName,
+          LastName: res.data.lastName,
+          Address: res.data.address,
+          PhoneNumber: res.data.phoneNumber,
+          CreditNumber: res.data.creditNumber,
+          UserId: res.data.user.id,
+          UserName:res.data.user.userName,
+          Password:res.data.user.password,
+          Email:res.data.user.email,
+          UserRole:3
         })
-        console.log(res.data.firstName)
+        console.log(res.data)
     }
 
 return Promise.resolve(res);
 })
 .catch(function (error) {
-    alert('Error')
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: `${error}`
+})
     console.log(error);
 });
 // }
@@ -104,13 +116,16 @@ render() {
   return (
     <div > 
     <h1>Personal Details</h1> <br />
-    <span > First Name: </span> <input type='text' defaultValue={this.state.FirstName}/> <br /> <br />
-    <span > Last Name: </span> <input type='text' defaultValue={this.state.LastName} /> <br /> <br />
-    <span > Address: </span> <input type='text' defaultValue={this.state.Address}/> <br /> <br />
-    <span > Phone Number: </span> <input type='text' defaultValue={this.state.PhoneNumber}/> <br /> <br />
-    <span > Credit Number: </span> <input type='text' defaultValue={this.state.CreditNumber}/> <br /> <br />
-    <span > UserId: </span> <input type='text' defaultValue={this.state.UserId}/> <br /> <br />
-    <span >User: </span> <input type='text' defaultValue={this.state.User}/> <br /> <br />
+    <span > First Name: </span> <input type='text' name='firstname' defaultValue={this.state.FirstName} onChange={this.handleChange}/> <br /> <br />
+    <span > Last Name: </span> <input type='text' name='lastname' defaultValue={this.state.LastName} onChange={this.handleChange} /> <br /> <br />
+    <span > Address: </span> <input type='text' name='address' defaultValue={this.state.Address} onChange={this.handleChange}/> <br /> <br />
+    <span > Phone Number: </span> <input type='text' name='phonenumber' defaultValue={this.state.PhoneNumber} onChange={this.handleChange}/> <br /> <br />
+    <span > Credit Number: </span> <input type='text' name='creditnumber' defaultValue={this.state.CreditNumber} onChange={this.handleChange}/> <br /> <br />
+    <span >UserName: </span> <input type='text' name='username' defaultValue={this.state.UserName} onChange={this.handleChange}/> <br /> <br />
+    <span >Email: </span> <input type='text' name='email' defaultValue={this.state.Email} onChange={this.handleChange}/> <br /> <br />
+    <span >Password: </span> <input type='text' name='password' defaultValue={this.state.Password} onChange={this.handleChange}/> <br /> <br />
+    <button type="Button" onClick={this.UpdateCustomer} >Update
+    </button>
     </div>
    ) }
 }

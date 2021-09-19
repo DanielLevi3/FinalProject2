@@ -8,10 +8,10 @@ namespace FinalProject2
     {
         public void CancelTicket(LoginToken<Customers> token, Tickets ticket)
         {
-            if(token!=null)
+            if (token != null)
             {
-                if(_ticketDAO!=null)
-                _ticketDAO.Remove(ticket.ID);
+                if (_ticketDAO != null)
+                    _ticketDAO.Remove(ticket.ID);
                 else
                 {
                     _ticketDAO = new TicketsDAOPGSQL();
@@ -23,10 +23,10 @@ namespace FinalProject2
         public IList<Flights> GetAllMyFlights(LoginToken<Customers> token)
         {
             IList<Flights> flights = new List<Flights>();
-            if(token!=null)
+            if (token != null)
             {
-                if(_flightDAO!=null)
-              flights = _flightDAO.GetAll();
+                if (_flightDAO != null)
+                    flights = _flightDAO.GetAll();
                 else
                 {
                     _flightDAO = new FlightsDAOPGSQL();
@@ -39,7 +39,7 @@ namespace FinalProject2
         public Tickets PurchaseTicket(LoginToken<Customers> token, Flights flight)
         {
             Tickets ticket = new Tickets();
-            if (token!=null)
+            if (token != null)
             {
                 ticket.CustomerID = token.User.ID;
                 ticket.FlightID = flight.ID;
@@ -53,9 +53,10 @@ namespace FinalProject2
             Customers c = new Customers();
             if (token != null)
             {
-               if(_customerDAO != null)
+                if (_customerDAO != null)
                 {
                     c = _customerDAO.GetById(token.User.ID);
+                    c.User = token.User.User;
                 }
                 else
                 {
@@ -64,6 +65,24 @@ namespace FinalProject2
                 }
             }
             return c;
+        }
+        public void UpdateCustomer(LoginToken<Customers> token, Customers c)
+        {
+            if (token != null)
+            {
+                if (_customerDAO != null && _userDAO != null)
+                {
+                    _customerDAO.Update(c);
+                    _userDAO.Update(c.User);
+                }
+                else
+                {
+                    _customerDAO = new CustomersDAOPGSQL();
+                    _userDAO = new UsersDAOPGSQL();
+                    _customerDAO.Update(c);
+                    _userDAO.Update(c.User);
+                }
+            }
         }
     }
 }

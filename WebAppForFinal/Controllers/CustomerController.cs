@@ -127,5 +127,22 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(c);
         }
+        [HttpPut("UpdateCustomerDetails")]
+        public async Task<ActionResult> UpdateCustomerDetails([FromBody] Customers cus)
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
+                   token_customer, out LoggedInCustomerFacade facade);
+            try
+            {
+                cus.User = token_customer.User.User;
+                await Task.Run(() => facade.UpdateCustomer(token_customer, cus));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"{{ error: \"{ex.Message}\" }}");
+            }
+
+            return Ok();
+        }
     }
 }

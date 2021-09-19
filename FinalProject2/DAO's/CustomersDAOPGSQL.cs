@@ -136,7 +136,7 @@ namespace FinalProject2
                             c.Address = (string)reader["address"];
                             c.PhoneNumber = (string)reader["phone_no"];
                             c.CreditNumber = (string)reader["credit_card_no"];
-                            c.UserId = (long)reader["user_id"];
+                            c.UserId = (long)reader["user_id"];//the user_id for some reason not passing here
                         }
                     }
                 }
