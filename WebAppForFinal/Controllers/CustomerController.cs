@@ -2,9 +2,11 @@
 using FinalProject2;
 using FinalProject2.Classes;
 using FinalProject2.DAO_s;
+using FinalProject2.DTO_s;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,13 +57,24 @@ namespace WebAppForFinal.Controllers
         [HttpGet("GetAllFlight")]
         public async Task<ActionResult<Flights>> GetAllFlight()
         {
+            //AirlineCompanyDTO air1 = m_mapper.Map<AirlineCompaniesDTO>(airline);
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
                     token_customer, out LoggedInCustomerFacade facade);
 
             IList<Flights> result = null;
+            List<FlightDTO> flightDTOs = new List<FlightDTO>();
+            Dictionary<long, long> mapFlightsToTickets = new Dictionary<long, long>();
             try
             {
                 result = await Task.Run(() => facade.GetAllMyFlights(token_customer));
+                mapFlightsToTickets = await Task.Run(() => facade.GetAllTicketsIdByFlightsId(token_customer, result));
+
+                foreach (Flights f in result)
+                {
+                    FlightDTO flightDTO = m_mapper.Map<FlightDTO>(f);
+                    flightDTO.TicketId = mapFlightsToTickets[f.ID];
+                    flightDTOs.Add(flightDTO);
+                }
             }
             catch (Exception ex)
             {
@@ -71,7 +84,7 @@ namespace WebAppForFinal.Controllers
             {
                 return StatusCode(204, "{ }");
             }
-            return Ok(result);
+            return Ok(JsonConvert.SerializeObject(flightDTOs));
         }
 
         [HttpDelete("CancelTicket")]

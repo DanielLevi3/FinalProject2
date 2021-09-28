@@ -26,11 +26,11 @@ namespace FinalProject2
             if (token != null)
             {
                 if (_flightDAO != null)
-                    flights = _flightDAO.GetAll();
+                    flights = _flightDAO.GetFlightsByCustomerId(token.User.ID);
                 else
                 {
                     _flightDAO = new FlightsDAOPGSQL();
-                    flights = _flightDAO.GetAll();
+                    flights = _flightDAO.GetFlightsByCustomerId(token.User.ID);
                 }
             }
             return flights;
@@ -83,6 +83,38 @@ namespace FinalProject2
                     _userDAO.Update(c.User);
                 }
             }
+        }
+        public Dictionary<long, long> GetAllTicketsIdByFlightsId(LoginToken<Customers> token, IList<Flights> flights)
+        {
+            Dictionary<long, long> mapFlightsToTickets = new Dictionary<long, long>();
+            if (token != null)
+            {
+                if(_ticketDAO != null && _flightDAO != null)
+                { 
+                List<Tickets> tickets =_ticketDAO.GetAll();
+                List<Flights> flightsLst = _flightDAO.GetAll();
+                    tickets.ForEach(ticket =>
+                    {
+                        Flights f = flightsLst.Find(f => f.ID == ticket.FlightID);
+                        mapFlightsToTickets.Add(f.ID, ticket.ID);
+                    });
+                    return mapFlightsToTickets;
+                }
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    _ticketDAO = new TicketsDAOPGSQL();
+                    List<Tickets> tickets = _ticketDAO.GetAll();
+                    List<Flights> flightsLst = _flightDAO.GetAll();
+                    flightsLst.ForEach(flight =>
+                    {
+                        Tickets ticket = tickets.Find(tick => tick.FlightID == flight.ID);
+                        mapFlightsToTickets.Add(flight.ID, ticket.ID);
+                    });
+                    return mapFlightsToTickets;
+                }
+            }
+            return mapFlightsToTickets;
         }
     }
 }

@@ -2,7 +2,7 @@ import React, { Component }  from 'react';
 import $ from 'jquery';
 import axios from 'axios';
 import UserService from './UserService';
-import Swal from 'react-bootstrap-sweetalert';
+import Swal from "sweetalert2";  
 
 
 class MyDetails extends Component

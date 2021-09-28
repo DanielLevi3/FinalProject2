@@ -13,6 +13,6 @@ namespace FinalProject2.DTO_s
         public DateTime DepartureTime;
         public DateTime LandingTime;
         public int RemainingTickets;
-    
+        public long TicketId;
     }
 }

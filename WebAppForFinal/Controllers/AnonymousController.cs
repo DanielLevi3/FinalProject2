@@ -265,7 +265,7 @@ namespace WebAppForFinal.Controllers
 
         [HttpPost("SignUpAirline")]
         public async void SignUpAirline([FromBody] AirlineCompanyDTO airline)
-
+        //AirlineCompanyDTO air1 = m_mapper.Map<AirlineCompaniesDTO>(airline);
         {
             AirlineCompanies air1 = m_mapper.Map<AirlineCompanies>(airline);
             try
