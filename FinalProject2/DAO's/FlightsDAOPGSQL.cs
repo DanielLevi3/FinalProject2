@@ -343,5 +343,44 @@ namespace FinalProject2
             }
             return f_list;
         }
+        //sp_get_flights_by_airline_id
+        public IList<Flights> GetByAirlineId(long id)
+        {
+            List<Flights> f_list = new List<Flights>();
+            try
+            {
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
+                {
+                    conn.Open();
+
+                    using (var cmd = new NpgsqlCommand("sp_get_flights_by_airline_id", conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("x", id));
+
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Flights f = new Flights();
+                            {
+                                f.ID = (long)reader["id"];
+                                f.AirlineCompanyId = (long)reader["airline_company_id"];
+                                f.OriginCountryId = (long)reader["origin_country_id"];
+                                f.DestinationCountryId = (long)reader["destination_country_id"];
+                                f.DepartureTime = (DateTime)reader["departure_time"];
+                                f.LandingTime = (DateTime)reader["landing_time"];
+                                f.RemainingTickets = (int)reader["remaining_tickets"];
+                            }
+                            f_list.Add(f);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Something went wrong in GetFlightsByLandingDate {ex} check connection");
+            }
+            return f_list;
+        }
     }
 }

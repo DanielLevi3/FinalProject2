@@ -2,9 +2,11 @@
 using FinalProject2;
 using FinalProject2.Classes;
 using FinalProject2.DAO_s;
+using FinalProject2.DTO_s;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +32,22 @@ namespace WebAppForFinal.Controllers
                 facade1 = FlightCenterSystem.GetInstance.GetFacade(token_airline);
                 facade = facade1 as LoggedInAirlineFacade;
             }
+
+//        IList<Flights> result = null;
+//        List<FlightDTO> flightDTOs = new List<FlightDTO>();
+//        Dictionary<long, long> mapFlightsToTickets = new Dictionary<long, long>();
+//            try
+//            {
+//                result = await Task.Run(() => facade.GetAllMyFlights(token_customer));
+//        mapFlightsToTickets = await Task.Run(() => facade.GetAllTicketsIdByFlightsId(token_customer, result));
+
+//                foreach (Flights f in result)
+//                {
+//                    FlightDTO flightDTO = m_mapper.Map<FlightDTO>(f);
+//        flightDTO.TicketId = mapFlightsToTickets[f.ID];
+//                    flightDTOs.Add(flightDTO);
+//                }
+//}
 
         [HttpGet("GetAllFlights/")]
         public async Task<ActionResult<Flights>> GetAllFlights()
@@ -73,16 +91,18 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("GetAirlineByID/{airlineID}")]
-        public async Task<ActionResult<AirlineCompanies>> GetAirlineByID(int airlineID)
+        [HttpGet("GetAirlineDetails")]
+        public async Task<ActionResult<AirlineCompanies>> GetAirlineDetails()
         {
             AirlineCompanies result = null;
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
                      token_airline, out LoggedInAirlineFacade facade);
 
+            AirlineCompanyDTO airDTO = null;
             try
             {
-                result = await Task.Run(() => facade.GetAirlineById(token_airline, airlineID));
+                result = await Task.Run(() => facade.GetAirlineDetails(token_airline));
+                airDTO = m_mapper.Map<AirlineCompanyDTO>(result);
             }
             catch (Exception ex)
             {
@@ -92,7 +112,7 @@ namespace WebAppForFinal.Controllers
             {
                 return StatusCode(204, "{ }");
             }
-            return Ok(result);
+            return Ok(JsonConvert.SerializeObject(airDTO));
         }
 
         [HttpDelete("CancelFlight")]
@@ -102,6 +122,7 @@ namespace WebAppForFinal.Controllers
                                  token_airline, out LoggedInAirlineFacade facade);
             try
             {
+                //Flights flight = m_mapper.Map<Flights>(flightDTO);
                 await Task.Run(() => facade.CancelFlight(token_airline, flight));
             }
             catch (Exception ex)
@@ -181,6 +202,33 @@ namespace WebAppForFinal.Controllers
             }
 
             return Ok();
+        }
+        [HttpGet("GetAllFlightsByAirline/")]
+        public async Task<ActionResult<Flights>> GetAllFlightsByAirline()
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
+                    token_airline, out LoggedInAirlineFacade facade);
+
+            IList<Flights> result = null;
+            List<FlightDTO> flightDTOs = new List<FlightDTO>();
+            try
+            {
+                result = await Task.Run(() => facade.GetAllFlightsByAirline(token_airline));
+                foreach (Flights f in result)
+                {
+                    FlightDTO flight = m_mapper.Map<FlightDTO>(f);
+                    flightDTOs.Add(flight);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+            if (result == null)
+            {
+                return StatusCode(204, "{ }");
+            }
+            return Ok(JsonConvert.SerializeObject(flightDTOs));
         }
     }
 }

@@ -13,6 +13,5 @@ namespace FinalProject2
         void UpdateFlight(LoginToken<AirlineCompanies> token, Flights flight);
         void ChangeMyPassword(LoginToken<AirlineCompanies> token, string oldPassword, string newPassword);
         void ModifyAirlineDetails(LoginToken<AirlineCompanies> token, AirlineCompanies airline);
-
     }
 }

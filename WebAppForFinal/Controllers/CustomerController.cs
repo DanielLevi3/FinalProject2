@@ -89,7 +89,7 @@ namespace WebAppForFinal.Controllers
 
         [HttpDelete("CancelTicket")]
         public async Task<ActionResult<Customers>> CancelTicket([FromBody] Tickets ticket)
-        {
+         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Customers>
                      token_customer, out LoggedInCustomerFacade facade);
             try

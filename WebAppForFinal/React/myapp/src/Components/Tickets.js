@@ -64,6 +64,12 @@ deleteTicket =async (id)=>
     {
     if (res.status == 200) 
     {
+      let newArr = this.state.tickets.filter((ticket)=>{
+        return ticket.id !=id;
+      });
+      this.setState({
+        tickets:newArr,
+      });
       console.log(res.data)
       Swal.fire(
         'Ticket purchase was canceled succefully!',
@@ -79,6 +85,7 @@ deleteTicket =async (id)=>
   }) 
   })
 }
+
 // else
 // {
 //   Swal.fire({

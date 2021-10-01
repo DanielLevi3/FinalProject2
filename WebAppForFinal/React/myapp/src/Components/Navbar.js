@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import MyDetails from './MyDetails';
+import MyDetails from './MyDetailsCustomer';
 import UserService from './UserService';
 import jwtDecode from 'jwt-decode';
 
@@ -39,7 +39,7 @@ const Navbar = (props) => {
           <li><NavLink to="/dashboard">Dashboard</NavLink></li>
 
           { localStorage.getItem('token') != null &&
-            <li><NavLink to="/" onClick={logout}>LogOut</NavLink></li>
+            <li><NavLink to="/" onClick={logout}>Logout</NavLink></li>
           }
           { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "3" &&
             <li><NavLink to="/customer/Mydetails"> My Details</NavLink></li>
@@ -47,7 +47,12 @@ const Navbar = (props) => {
           { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "3" &&
           <li><NavLink to="/customer/Tickets"> Tickets </NavLink></li>
           }
-          
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "2" &&
+          <li><NavLink to="/Airline/Flights"> Flights </NavLink></li>
+          }
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "2" &&
+          <li><NavLink to="/Airline/Mydetails"> My Details </NavLink></li>
+          }
         </ul>
       </div>
     </nav> 

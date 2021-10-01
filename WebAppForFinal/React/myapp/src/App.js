@@ -6,8 +6,9 @@ import React, { Component } from 'react';
   import Dashboard from './Components/Dashboard';
   import Admin from './Components/Admin';
   import Airline from './Components/Airline';
-  import MyDetails from './Components/MyDetails';
   import Tickets from './Components/Tickets';
+  import MyDetailsCustomer from './Components/MyDetailsCustomer';
+  import MyDetailsAirline from './Components/MyDetailsAirline';
   
   class App extends Component {
   render() {
@@ -21,9 +22,11 @@ import React, { Component } from 'react';
               <Route path='/login' component={Login} />
               <Route path='/dashboard' component={Dashboard} />
               <Route path='/admin' component={Admin} />
-              <Route path='/airline' component={Airline} />
-              <Route path='/customer/Mydetails' component={MyDetails} />
+              <Route path='/Airline/Flights' component={Airline} />
+              <Route path='/customer/Mydetails' component={MyDetailsCustomer} />
               <Route path='/customer/Tickets' component={Tickets} />
+              <Route path='/Airline/Mydetails' component={MyDetailsAirline} />
+
             </Switch>
           </header>
         </div>

@@ -123,7 +123,7 @@ namespace FinalProject2
                     using (var cmd = new NpgsqlCommand("sp_get_airlinecompanies_by_username", conn))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new NpgsqlParameter("user_name", u_name));
+                        cmd.Parameters.Add(new NpgsqlParameter("uname", u_name));
                         var reader = cmd.ExecuteReader();
                         if (reader.Read())
                         {

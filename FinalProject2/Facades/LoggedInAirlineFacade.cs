@@ -110,20 +110,45 @@ namespace FinalProject2
                 }
             }
         }
-        public AirlineCompanies GetAirlineById(LoginToken<AirlineCompanies> token,int id)
+        public AirlineCompanies GetAirlineDetails(LoginToken<AirlineCompanies> token)
         {
-            AirlineCompanies air = new AirlineCompanies();
+            AirlineCompanies airline = new AirlineCompanies();
             if (token != null)
             {
                 if (_airlineDAO != null)
-                    air = _airlineDAO.GetById(id);
+                {
+                     airline = _airlineDAO.GetAirlineByUserame(token.User.User.UserName);
+                     airline.User = token.User.User;
+                }
                 else
                 {
-                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
-                    air = _airlineDAO.GetById(id);
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL(); 
+                     airline = _airlineDAO.GetAirlineByUserame(token.User.User.UserName);
+                    airline.User = token.User.User;
+
                 }
             }
-            return air;
+            return airline;
+        }
+        public IList<Flights> GetAllFlightsByAirline(LoginToken<AirlineCompanies> token)
+        {
+            IList<Flights> flights = new List<Flights>();
+            if (token != null)
+            {
+                if (_flightDAO != null && _airlineDAO != null)
+                {
+                    AirlineCompanies air = _airlineDAO.GetAirlineByUserame(token.User.User.UserName);
+                    flights = _flightDAO.GetByAirlineId(air.ID);
+                }
+                else
+                {
+                    _flightDAO = new FlightsDAOPGSQL();
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    AirlineCompanies air = _airlineDAO.GetById(token.User.ID);
+                    flights = _flightDAO.GetByAirlineId(air.ID);
+                }
+            }
+            return flights;
         }
     }
 }
