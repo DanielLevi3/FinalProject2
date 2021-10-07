@@ -9,12 +9,31 @@ class Airline extends Component
      this.state =
     {
       flights :[],
+      newFlight: {
+        "AirlineCompanyName":"",
+        "OriginCountryName":"",
+        "DestinationCountryName":"",
+        "DepartureTime":"",
+        "LandingTime":"",
+        "RemainingTickets":0,
       }
+    }
   }
 
 
 componentDidMount(){
   this.getAllFlights();
+  // call initNewFlightDetails
+}
+
+initNewFlightDetails = ()=>{
+  // bring user service
+  // get token object
+  // flight = this.state.newFlight
+  // flight.AirlineCompanyName = airlineName
+  // this.setState({
+  //   newFlight: flight
+  // })
 }
 
 getAllFlights = async ()=>{
@@ -140,6 +159,15 @@ handleChange = (e) => {
       [e.target.name]: e.target.value 
   });
 }
+
+handleChangeNewFlight = (e) => {
+  let flight = this.state.newFlight
+  flight[e.target.name] = e.target.value
+  this.setState({ 
+      newFlight: flight
+  });
+}
+
 // <h2>Add flight</h2>
 
 // <form>
@@ -183,8 +211,8 @@ render()
                   <td>{flight.AirlineCompanyName}</td>
                   <td><input type='text' name='OriginCountryName' defaultValue={flight.OriginCountryName} onChange={this.handleChange} /></td>
                   <td><input type='text' name='DestinationCountryName' defaultValue={flight.DestinationCountryName} onChange={this.handleChange} /></td>
-                  <td><input type='date' name='DepartureTime' defaultValue={flight.DepartureTime} onChange={this.handleChange} /></td>
-                  <td><input type='date' name='LandingTime' defaultValue={flight.LandingTime} onChange={this.handleChange} /></td>
+                  <td><input type='datetime-local' name='DepartureTime' defaultValue={flight.DepartureTime} onChange={this.handleChange} /></td>
+                  <td><input type='datetime-local' name='LandingTime' defaultValue={flight.LandingTime} onChange={this.handleChange} /></td>
                   <td><input type='number' name='RemainingTickets' defaultValue={flight.RemainingTickets} onChange={this.handleChange} /></td>
                   <td>
                       <button
@@ -208,11 +236,11 @@ render()
         <h4>Add flight</h4>
 
         <form>
-         <span> OriginCountry :</span> <input type="text" name="originCountry" required placeholder="Enter CountryName" onChange={this.handleChange} />
-         <span>DestinationCountry: </span> <input type="text" name="destinationCountry" required placeholder="Enter CountryName" onChange={this.handleChange} />
-         <span> DepartureTime:</span> <input type="date" name="departureTime" required placeholder="Enter DepartureTime" onChange={this.handleChange} />
-         <span>LandingTime :</span>  <input type="date" name="landingTime" required placeholder="Enter LandingTime"  onChange={this.handleChange} />
-         <span>RemainingTickets: </span><input type="number" name="remainingTickets" required placeholder="Enter RemainingTickets" onChange={this.handleChange} />
+         <span> OriginCountry :</span> <input type="text" name="originCountry" required placeholder="Enter CountryName" onChange={this.handleChangeNewFlight} />
+         <span>DestinationCountry: </span> <input type="text" name="destinationCountry" required placeholder="Enter CountryName" onChange={this.handleChangeNewFlight} />
+         <span> DepartureTime:</span> <input type="date" name="departureTime" required placeholder="Enter DepartureTime" onChange={this.handleChangeNewFlight} />
+         <span>LandingTime :</span>  <input type="date" name="landingTime" required placeholder="Enter LandingTime"  onChange={this.handleChangeNewFlight} />
+         <span>RemainingTickets: </span><input type="number" name="remainingTickets" required placeholder="Enter RemainingTickets" onChange={this.handleChangeNewFlight} />
          <span> </span> <button type="submit">Add</button>
         </form>
       </div>
