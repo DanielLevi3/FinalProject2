@@ -134,14 +134,15 @@ namespace WebAppForFinal.Controllers
         }
 
         [HttpPost("CreateFlight")]
-        public async Task<ActionResult> CreateFlight([FromBody] Flights flight)
+        public async Task<ActionResult> CreateFlight([FromBody] FlightDTO flightDTO)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
                                  token_airline, out LoggedInAirlineFacade facade);
 
             try
             {
-                await Task.Run(() => facade.CreateFlight(token_airline, flight));
+                Flights f = m_mapper.Map<Flights>(flightDTO);
+                await Task.Run(() => facade.CreateFlight(token_airline, f));
             }
             catch (Exception ex)
             {
@@ -170,14 +171,15 @@ namespace WebAppForFinal.Controllers
         }
 
         [HttpPut("UpdateAirlineDetails")]
-        public async Task<ActionResult> UpdateAirlineDetails([FromBody] AirlineCompanies airline)
+        public async Task<ActionResult> UpdateAirlineDetails([FromBody] AirlineCompanyDTO airline)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
                                  token_airline, out LoggedInAirlineFacade facade);
 
             try
             {
-                await Task.Run(() => facade.ModifyAirlineDetails(token_airline, airline));
+                AirlineCompanies air = m_mapper.Map<AirlineCompanies>(airline);
+                await Task.Run(() => facade.ModifyAirlineDetails(token_airline, air));
             }
             catch (Exception ex)
             {
@@ -187,14 +189,18 @@ namespace WebAppForFinal.Controllers
             return Ok();
         }
         [HttpPut("UpdateFlight")]
-        public async Task<ActionResult> UpdateFlight([FromBody] Flights flight)
+        public async Task<ActionResult> UpdateFlight([FromBody] FlightDTO flightDTO)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<AirlineCompanies>
                                  token_airline, out LoggedInAirlineFacade facade);
 
             try
             {
-                await Task.Run(() => facade.UpdateFlight(token_airline, flight));
+                //foreach (FlightDTO flight in flightDTO)
+                //{
+                    Flights f = m_mapper.Map<Flights>(flightDTO);
+                    await Task.Run(() => facade.UpdateFlight(token_airline, f));
+              //  }
             }
             catch (Exception ex)
             {

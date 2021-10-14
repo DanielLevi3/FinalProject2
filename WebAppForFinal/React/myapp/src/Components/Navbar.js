@@ -53,6 +53,15 @@ const Navbar = (props) => {
           { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "2" &&
           <li><NavLink to="/Airline/Mydetails"> My Details </NavLink></li>
           }
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "1" &&
+          <li><NavLink to="/Admin/Airlines"> Airlines </NavLink></li>
+          }
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "1" &&
+          <li><NavLink to="/Admin/Customers"> Customers </NavLink></li>
+          }
+          { localStorage.getItem('token') != null && jwtDecode(localStorage.getItem('token')).user_role == "1" &&
+          <li><NavLink to="/Admin/Inbox"> Inbox </NavLink></li>
+          }
         </ul>
       </div>
     </nav> 

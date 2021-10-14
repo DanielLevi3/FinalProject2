@@ -4,12 +4,13 @@ import React, { Component } from 'react';
   import Home from './Components/Home';
   import Login from './Components/Login';
   import Dashboard from './Components/Dashboard';
-  import Admin from './Components/Admin';
+  import AdminAirlines from './Components/AdminAirlines';
   import Airline from './Components/Airline';
   import Tickets from './Components/Tickets';
   import MyDetailsCustomer from './Components/MyDetailsCustomer';
   import MyDetailsAirline from './Components/MyDetailsAirline';
-  
+  import AdminCustomers from './Components/AdminCustomers'
+  import AdminInbox from './Components/AdminInbox';
   class App extends Component {
   render() {
     return (
@@ -21,12 +22,13 @@ import React, { Component } from 'react';
               <Route exact path='/' component={Home} />
               <Route path='/login' component={Login} />
               <Route path='/dashboard' component={Dashboard} />
-              <Route path='/admin' component={Admin} />
               <Route path='/Airline/Flights' component={Airline} />
               <Route path='/customer/Mydetails' component={MyDetailsCustomer} />
               <Route path='/customer/Tickets' component={Tickets} />
               <Route path='/Airline/Mydetails' component={MyDetailsAirline} />
-
+              <Route path='/Admin/Airlines' component={AdminAirlines} />
+              <Route path='/Admin/Customers' component={AdminCustomers} />
+              <Route path='/Admin/Inbox' component={AdminInbox} />
             </Switch>
           </header>
         </div>
@@ -37,8 +39,8 @@ import React, { Component } from 'react';
 export default App;
 
 // function Home() {
-//   return <h2>Home</h2>;
-// }
+//   return <h2>Home</h2>;AdminInbox
+// }/Admin/Customers
 
 // function Login() {
 //   return <h2>Login</h2>;

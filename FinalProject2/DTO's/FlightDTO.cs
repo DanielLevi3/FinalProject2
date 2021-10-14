@@ -6,13 +6,13 @@ namespace FinalProject2.DTO_s
 {
    public class FlightDTO
     {
-        public long ID;
-        public string AirlineCompanyName;
-        public string OriginCountryName;
-        public string DestinationCountryName;
-        public DateTime DepartureTime;
-        public DateTime LandingTime;
-        public int RemainingTickets;
-        public long TicketId;
+        public long ID { get; set; }
+        public string AirlineCompanyName { get; set; }
+        public string OriginCountryName { get; set; }
+        public string DestinationCountryName { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public DateTime LandingTime { get; set; }
+        public int RemainingTickets { get; set; }
+        public long TicketId { get; set; }
     }
 }

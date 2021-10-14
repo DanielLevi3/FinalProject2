@@ -1,5 +1,4 @@
 import React, { Component }  from 'react';
-import $ from 'jquery';
 import axios from 'axios';
 import UserService from './UserService';
 import Swal from "sweetalert2";  
@@ -23,7 +22,6 @@ class MyDetailsCustomer extends Component
       Email: undefined,
       UserRole:3
     }
-this.Auth = new UserService();
 }
  
 componentDidMount() {

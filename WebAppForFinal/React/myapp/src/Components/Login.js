@@ -40,10 +40,10 @@ this.Auth = new UserService();
      await this.Auth.tryLogin(this.state.Name,this.state.Password).then(res => {
       //  console.log(this.Auth.decoded.user_role)
       if(this.Auth.decoded.user_role == "1") {
-        this.props.history.push('/admin'); // send user to admin page
+        this.props.history.push('/Admin/Airlines'); // send user to admin page
       }
       else if(this.Auth.decoded.user_role == "2") {
-        this.props.history.push('/airline'); // send user to airline page
+        this.props.history.push('/Airline/Mydetails'); // send user to airline page
       }
       else if(this.Auth.decoded.user_role == "3") {
         this.props.history.push('/customer/Mydetails'); // send user to customer page

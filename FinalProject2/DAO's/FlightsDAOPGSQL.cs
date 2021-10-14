@@ -35,7 +35,7 @@ namespace FinalProject2
         }
         public void Add(Flights f)
         {
-            ExecuteNonQuery($"call sp_add_flights({f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets})");
+            ExecuteNonQuery($"call sp_add_flights( {f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets})");
             log.Debug($"New Flight {f}");
         }
         public Flights GetById(long id)
@@ -117,7 +117,7 @@ namespace FinalProject2
 
         public void Update(Flights f)
         { 
-            ExecuteNonQuery($"call sp_update_flights({f.ID},{f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets}");
+            ExecuteNonQuery($"call sp_update_flights( {f.ID},{f.AirlineCompanyId},{f.OriginCountryId},{f.DestinationCountryId},'{f.DepartureTime}','{f.LandingTime}',{f.RemainingTickets})");
         }
 
         public Dictionary<Flights, int> GetAllFlightsVacancy()

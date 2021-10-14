@@ -40,14 +40,15 @@ namespace WebAppForFinal.Controllers
       
 
         [HttpDelete("DeleteAirline")]
-        public async Task<ActionResult<Administrator>> RemoveAirline([FromBody] AirlineCompanies airlineCompany)
+        public async Task<ActionResult<Administrator>> RemoveAirline([FromBody] AirlineCompanyDTO airlineCompany)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
                     token_admin, out LoggedInAdministratorFacade facade);
 
             try
             {
-                await Task.Run(() => facade.RemoveAirline(token_admin, airlineCompany));
+                AirlineCompanies air = m_mapper.Map<AirlineCompanies>(airlineCompany);
+                await Task.Run(() => facade.RemoveAirline(token_admin, air));
             }
             catch (Exception ex)
             {
@@ -93,10 +94,11 @@ namespace WebAppForFinal.Controllers
         [HttpGet("GetAllCustomers")]
         public async Task<ActionResult<Administrator>> GetAllCustomers()
         {
-            IList<Customers> cus = new List<Customers>();
+           
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
                     token_admin, out LoggedInAdministratorFacade facade);
-            
+            IList<Customers> cus = new List<Customers>();
+
             try
             {
                 await Task.Run(() =>cus= facade.GetAllCustomers(token_admin));
@@ -108,7 +110,30 @@ namespace WebAppForFinal.Controllers
 
             return Ok(JsonConvert.SerializeObject(cus));
         }
-        
+        [HttpGet("GetAllAirlines")]
+        public async Task<ActionResult<Administrator>> GetAllAirlines()
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
+                    token_admin, out LoggedInAdministratorFacade facade);
+            IList<AirlineCompanies> airlines = new List<AirlineCompanies>();
+            List<AirlineCompanyDTO> airlineCompanyDTOs = new List<AirlineCompanyDTO>();
+            try
+            {
+                await Task.Run(() => airlines = facade.GetAllAirlines(token_admin));
+                foreach (AirlineCompanies air in airlines)
+                {
+                    AirlineCompanyDTO airDTO = m_mapper.Map<AirlineCompanyDTO>(air);
+                    airlineCompanyDTOs.Add(airDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+
+            return Ok(JsonConvert.SerializeObject(airlineCompanyDTOs));
+        }
+
         [HttpGet("GetAirlineByID/{airlineID}")]
         public async Task<ActionResult<AirlineCompanies>> GetAirlineByID(int airlineID)
         {
@@ -189,14 +214,15 @@ namespace WebAppForFinal.Controllers
             return Ok();
         }
         [HttpPost("AddNewAirline")]
-        public async Task<ActionResult> AddNewAirline([FromBody] AirlineCompanies airline)
+        public async Task<ActionResult> AddNewAirline([FromBody] AirlineCompanyDTO airline)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
                     token_admin, out LoggedInAdministratorFacade facade);
 
             try
             {
-                await Task.Run(() => facade.CreateNewAirline(token_admin, airline));
+                AirlineCompanies air = m_mapper.Map<AirlineCompanies>(airline);
+                await Task.Run(() => facade.CreateNewAirline(token_admin, air));
             }
             catch (Exception ex)
             {
@@ -274,14 +300,15 @@ namespace WebAppForFinal.Controllers
             return Ok();
         }
         [HttpPut("UpadateAirline")]
-        public async Task<ActionResult> UpadateAirline([FromBody] AirlineCompanies airline)
+        public async Task<ActionResult> UpadateAirline([FromBody] AirlineCompanyDTO airline)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
                     token_admin, out LoggedInAdministratorFacade facade);
 
             try
             {
-                await Task.Run(() => facade.UpdateAirlineDetails(token_admin, airline));
+                AirlineCompanies air = m_mapper.Map<AirlineCompanies>(airline);
+                await Task.Run(() => facade.UpdateAirlineDetails(token_admin, air));
             }
             catch (Exception ex)
             {
@@ -308,14 +335,15 @@ namespace WebAppForFinal.Controllers
             return Ok();
         }
         [HttpDelete("DeleteWaitingAirline")]
-        public async Task<ActionResult<Administrator>> RemoveWaitingAirline([FromBody] AirlineCompanies airlineCompany)
+        public async Task<ActionResult<Administrator>> RemoveWaitingAirline([FromBody] AirlineCompanyDTO airlineCompany)
         {
             AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
                     token_admin, out LoggedInAdministratorFacade facade);
 
             try
             {
-                await Task.Run(() => facade.RemoveWaitingAirline(token_admin, airlineCompany));
+                AirlineCompanies air = m_mapper.Map<AirlineCompanies>(airlineCompany);
+                await Task.Run(() => facade.RemoveWaitingAirline(token_admin, air));
             }
             catch (Exception ex)
             {
@@ -325,24 +353,30 @@ namespace WebAppForFinal.Controllers
             return Ok();
         }
 
-        // POST api/<AdminController>
-        //[HttpPost("AddNewAirline")]
-        //public async Task<ActionResult> AddNewAirline([FromBody] AirlineCompanies airline)
-        //{ 
-        //    AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
-        //            token_admin, out LoggedInAdministratorFacade facade);
+        [HttpGet("GetAllWaitingAirlines")]
+        public async Task<ActionResult<Administrator>> GetAllWaitingAirlines()
+        {
+            AuthenticateAndGetTokenAndGetFacade(out LoginToken<Administrator>
+                    token_admin, out LoggedInAdministratorFacade facade);
+            IList<AirlineCompanies> airlines = new List<AirlineCompanies>();
+            List<AirlineCompanyDTO> airlineCompanyDTOs = new List<AirlineCompanyDTO>();
+            try
+            {
+                await Task.Run(() => airlines = facade.GetAllWaitingAirlines(token_admin));
+                foreach (AirlineCompanies air in airlines)
+                {
+                    AirlineCompanyDTO airDTO = m_mapper.Map<AirlineCompanyDTO>(air);
+                    airlineCompanyDTOs.Add(airDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
 
-        //    try
-        //    {
-        //        await Task.Run(() => facade.CreateNewAirline(token_admin, airline));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"{{ error: \"{ex.Message}\" }}");
-        //    }
+            return Ok(JsonConvert.SerializeObject(airlineCompanyDTOs));
+        }
 
-        //    return Ok();
-        //}
 
     }
 }

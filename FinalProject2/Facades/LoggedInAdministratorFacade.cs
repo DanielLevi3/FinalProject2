@@ -32,12 +32,17 @@ namespace FinalProject2
         {
             if(token != null)
             {
-                if(_airlineDAO!= null)
-              _airlineDAO.Add(airline);
+                if(_airlineDAO!= null && _waitingAirlinesDAO!= null)
+                { 
+                 _airlineDAO.Add(airline);
+                    _waitingAirlinesDAO.Remove(airline.ID);
+                 }
                 else
                 {
+                    _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
                     _airlineDAO = new AirlineCompaniesDAOPGSQL();
                     _airlineDAO.Add(airline);
+                    _waitingAirlinesDAO.Remove(airline.ID);
                 }
             }
         }
@@ -89,17 +94,55 @@ namespace FinalProject2
             IList<Customers> customers = new List<Customers>();
             if (token != null)
             {
-                if (_customerDAO != null)
+                if (_customerDAO != null && _userDAO != null )
+                { 
                     customers = _customerDAO.GetAll();
+                    foreach (Customers cus in customers)
+                    {
+                        cus.User = _userDAO.GetById(cus.UserId);
+                    }
+                }
                 else
                 {
                     _customerDAO = new CustomersDAOPGSQL();
+                    _userDAO = new UsersDAOPGSQL();
                     customers = _customerDAO.GetAll();
+                    foreach (Customers cus in customers)
+                    {
+                        cus.User = _userDAO.GetById(cus.UserId);
+                    }
                 }
             }
             return customers;
         }
 
+        public IList<AirlineCompanies> GetAllAirlines(LoginToken<Administrator> token)
+        {
+            IList<AirlineCompanies> airlineCompanies = new List<AirlineCompanies>();
+            if (token != null)
+            {
+                if (_airlineDAO != null && _userDAO != null)
+                {     
+                    airlineCompanies = _airlineDAO.GetAll();
+                    foreach (AirlineCompanies air in airlineCompanies)
+                    {
+                        air.User = _userDAO.GetById(air.UserId);
+                    }
+                }
+
+                else
+                {
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _userDAO = new UsersDAOPGSQL();
+                    airlineCompanies = _airlineDAO.GetAll();
+                    foreach (AirlineCompanies air in airlineCompanies)
+                    {
+                        air.User = _userDAO.GetById(air.UserId);
+                    }
+                }
+            }
+            return airlineCompanies;
+        }
         public void RemoveAdmin(LoginToken<Administrator> token, Administrator admin)
         {
             if ( token != null)
@@ -180,11 +223,16 @@ namespace FinalProject2
         {
             if(token!= null)
             {
-                if(_airlineDAO!=null)
-                _airlineDAO.Update(airline);
+                if (_airlineDAO != null && _userDAO !=null)
+                {
+                    _userDAO.Update(airline.User);
+                    _airlineDAO.Update(airline);
+                }
                 else
                 {
+                    _userDAO = new UsersDAOPGSQL();
                     _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _userDAO.Update(airline.User);
                     _airlineDAO.Update(airline);
                 }
             }
@@ -194,11 +242,16 @@ namespace FinalProject2
         {
             if(token!=null)
             {
-                if(_customerDAO!=null)
+                if(_customerDAO!=null && _userDAO != null)
+                {
+                    _userDAO.Update(customer.User);
                 _customerDAO.Update(customer);
+                }
                 else
                 {
+                    _userDAO = new UsersDAOPGSQL();
                     _customerDAO = new CustomersDAOPGSQL();
+                    _userDAO.Update(customer.User);
                     _customerDAO.Update(customer);
                 }
             }
@@ -312,12 +365,23 @@ namespace FinalProject2
             IList<AirlineCompanies> airlines = new List<AirlineCompanies>();
             if (token != null)
             {
-                if (_waitingAirlinesDAO != null)
+                if (_waitingAirlinesDAO != null && _userDAO!=null)
+                {
                     airlines = _waitingAirlinesDAO.GetAll();
+                    foreach (AirlineCompanies air in airlines)
+                    {
+                        air.User = _userDAO.GetById(air.UserId);
+                    }
+                }
                 else
                 {
+                    _userDAO = new UsersDAOPGSQL();
                     _waitingAirlinesDAO = new WaitingAirlinesDAOPGSQL();
                     airlines = _waitingAirlinesDAO.GetAll();
+                    foreach (AirlineCompanies air in airlines)
+                    {
+                        air.User = _userDAO.GetById(air.UserId);
+                    }
                 }
             }
             return airlines;

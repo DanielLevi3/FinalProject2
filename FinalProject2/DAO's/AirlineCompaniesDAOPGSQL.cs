@@ -109,7 +109,7 @@ namespace FinalProject2
         }
         public void Update(AirlineCompanies ac)
         {
-            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},{ac.Name},{ac.CountryId},{ac.UserId})");
+            ExecuteNonQuery($"call sp_update_airlinecompany({ac.ID},'{ac.Name}',{ac.CountryId},{ac.UserId})");
         }
         public AirlineCompanies GetAirlineByUserame(string u_name)
         {

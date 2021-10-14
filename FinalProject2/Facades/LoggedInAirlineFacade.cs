@@ -87,11 +87,18 @@ namespace FinalProject2
         {
             if(token!= null)
             {
-                if (_airlineDAO != null)
+                if (_airlineDAO != null && _userDAO !=null)
+                { 
+                   // airline.User = _userDAO.GetById(airline.UserId);
+                    _userDAO.Update(airline.User);
                     _airlineDAO.Update(airline);
+                }
                 else
                 {
                     _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    _userDAO = new UsersDAOPGSQL();
+                //    airline.User = _userDAO.GetById(airline.UserId);
+                    _userDAO.Update(airline.User);
                     _airlineDAO.Update(airline);
                 }
             }
@@ -101,11 +108,16 @@ namespace FinalProject2
         {
             if(token!=null)
             {
-                if(_flightDAO!=null)
-                _flightDAO.Update(flight);
+                if (_flightDAO != null&& _airlineDAO!= null)
+                {
+                    flight.Airline = _airlineDAO.GetById(flight.AirlineCompanyId);
+                    _flightDAO.Update(flight);
+                }
                 else
                 {
                     _flightDAO = new FlightsDAOPGSQL();
+                    _airlineDAO = new AirlineCompaniesDAOPGSQL();
+                    flight.Airline = _airlineDAO.GetById(flight.AirlineCompanyId);
                     _flightDAO.Update(flight);
                 }
             }
