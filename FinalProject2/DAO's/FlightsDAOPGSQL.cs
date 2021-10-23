@@ -382,5 +382,46 @@ namespace FinalProject2
             }
             return f_list;
         }
+        public IList<Flights> GetFlightsByParameters(DateTime departureDate, DateTime landingDate, long originCountry, long destCountry)
+        {
+            IList<Flights> f_list = new List<Flights>();
+            try
+            {
+                using (var conn = new NpgsqlConnection(GlobalConfig.GetConn))
+                {
+                    conn.Open();
+
+                    using (var cmd = new NpgsqlCommand("sp_get_flights_by_parameters", conn))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new NpgsqlParameter("d_time", departureDate));
+                        cmd.Parameters.Add(new NpgsqlParameter("l_time", landingDate));
+                        cmd.Parameters.Add(new NpgsqlParameter("o_country", originCountry));
+                        cmd.Parameters.Add(new NpgsqlParameter("d_country", destCountry));
+
+                        var reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Flights f = new Flights();
+                            {
+                                f.ID = (long)reader["id"];
+                                f.AirlineCompanyId = (long)reader["airline_company_id"];
+                                f.OriginCountryId = (long)reader["origin_country_id"];
+                                f.DestinationCountryId = (long)reader["destination_country_id"];
+                                f.DepartureTime = (DateTime)reader["departure_time"];
+                                f.LandingTime = (DateTime)reader["landing_time"];
+                                f.RemainingTickets = (int)reader["remaining_tickets"];
+                            }
+                            f_list.Add(f);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Something went wrong in GetFlightsByDepatrureDate {ex} check connection");
+            }
+            return f_list;
+        }
     }
 }

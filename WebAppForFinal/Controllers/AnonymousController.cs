@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FinalProject2;
+using FinalProject2.Classes;
 using FinalProject2.DTO_s;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,22 +50,27 @@ namespace WebAppForFinal.Controllers
         [HttpGet("getallflights/")]
         public async Task<ActionResult<Flights>> GetAllFlights()
         {
-            
+            List<FlightDTO> flightDTOs = new List<FlightDTO>();
 
-            IList<Flights> result = null;
+            IList<Flights> resultFlights = null;
             try
             {
-                result = await Task.Run(() => facade.GetAllFlights());
+                resultFlights = await Task.Run(() => facade.GetAllFlights());
+                foreach (Flights f in resultFlights)
+                {
+                    FlightDTO f_DTO = m_mapper.Map<FlightDTO>(f);
+                    flightDTOs.Add(f_DTO);
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
             }
-            if (result == null)
+            if (resultFlights == null)
             {
                 return StatusCode(204, "{ }");
             }
-            return Ok(result);
+              return Ok(JsonConvert.SerializeObject(flightDTOs));
         }
 
         [HttpGet("getflightbyid/{flightid}")]
@@ -246,7 +253,31 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-
+        [HttpGet("getflightbyparameters")]
+        public async Task<ActionResult<Flights>> GetFlightByParameters(FlightParametersDTO f_paramDTO)
+        {
+            FlightParameters f_param = m_mapper.Map<FlightParameters>(f_paramDTO);
+            List<FlightDTO> flightDTOs = new List<FlightDTO>(); 
+            IList<Flights> resultFlights = null;
+            try
+            {
+                resultFlights = await Task.Run(() => facade.GetFlightsByParameters(f_param.LandingTime, f_param.LandingTime, f_param.OriginCountryId, f_param.DestinationCountryId));
+                foreach (Flights f in resultFlights)
+                {
+                    FlightDTO f_DTO = m_mapper.Map<FlightDTO>(f);
+                    flightDTOs.Add(f_DTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, $"{{ error: \"{ex.Message}\" }}");
+            }
+            if (resultFlights == null)
+            {
+                return StatusCode(204, "{ }");
+            }
+            return Ok(JsonConvert.SerializeObject(flightDTOs));
+        }
         // POST api/<AnonymousController>
         [HttpPost("SignUp")]
         public async void SignUp([FromBody] Customers customer)

@@ -104,6 +104,11 @@ namespace FinalProject2
             }
         }
 
+        public AirlineCompanies GetAirlineById(LoginToken<AirlineCompanies> airline, int v)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateFlight(LoginToken<AirlineCompanies> token, Flights flight)
         {
             if(token!=null)

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
   import { BrowserRouter, Route, Switch } from 'react-router-dom';
   import Home from './Components/Home';
   import Login from './Components/Login';
-  import Dashboard from './Components/Dashboard';
+  import FlightSearch from './Components/FlightSearch';
   import AdminAirlines from './Components/AdminAirlines';
   import Airline from './Components/Airline';
   import Tickets from './Components/Tickets';
@@ -21,7 +21,7 @@ import React, { Component } from 'react';
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/login' component={Login} />
-              <Route path='/dashboard' component={Dashboard} />
+              <Route path='/Flight' component={FlightSearch} />
               <Route path='/Airline/Flights' component={Airline} />
               <Route path='/customer/Mydetails' component={MyDetailsCustomer} />
               <Route path='/customer/Tickets' component={Tickets} />

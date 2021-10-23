@@ -106,7 +106,20 @@ namespace FinalProject2
             }
             return flights;
         }
-
+        public IList<Flights> GetFlightsByParameters (DateTime landingDate, DateTime departureDate, long originCountry, long destCountry)
+        {
+            IList<Flights> flights = new List<Flights>();
+            if (_flightDAO != null)
+            {
+                flights = _flightDAO.GetFlightsByParameters(landingDate,departureDate,originCountry,destCountry);
+            }
+            else
+            {
+                _flightDAO = new FlightsDAOPGSQL();
+                flights = _flightDAO.GetFlightsByParameters(landingDate, departureDate, originCountry, destCountry);
+            }
+            return flights;
+        }
         public IList<Flights> GetFlightsByOriginCountry(int countryCode)
         {
             IList<Flights> flights = new List<Flights>();

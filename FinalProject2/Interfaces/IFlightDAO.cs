@@ -13,6 +13,7 @@ namespace FinalProject2
         IList<Flights> GetFlightsByLandingDate(DateTime landingDate);
         IList<Flights> GetFlightsByCustomerId(long customer_id);
         IList<Flights> GetByAirlineId(long id);
+        IList<Flights> GetFlightsByParameters(DateTime landingDate, DateTime departureDate,long originCountry,long destCountry);
 
     }
 }

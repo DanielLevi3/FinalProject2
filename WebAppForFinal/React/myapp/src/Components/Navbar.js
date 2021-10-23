@@ -36,7 +36,7 @@ const Navbar = (props) => {
         <ul className="right">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/login">Login</NavLink></li>
-          <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+          <li><NavLink to="/Flight">Flight Search</NavLink></li>
 
           { localStorage.getItem('token') != null &&
             <li><NavLink to="/" onClick={logout}>Logout</NavLink></li>
