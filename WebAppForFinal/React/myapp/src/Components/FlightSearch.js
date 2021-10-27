@@ -11,10 +11,10 @@ class FlightSearch extends Component
       FlightsGetAll:[],
       Flights :[],
       Change:{
-      destinationCountry:"",
-      originCountry:"",
-      landingDate:"",
-      departureDate:"",
+        DestinationCountryName:"",
+      OriginCountryName:"",
+      LandingTime:"",
+      DepartureTime:"",
       }
     };
 }
@@ -46,8 +46,8 @@ getAllFlightsByParams = async (e)=>{
   console.log(this.state.Change)
  
   const C_hange =this.state.Change
-await axios.get('https://localhost:44395/api/Anonymous/getflightbyparameters}',{data :{C_hange}
-}).then( res => 
+  console.log(this.state.Change)
+await axios.post('https://localhost:44395/api/Anonymous/getflightbyparameters',this.state.Change).then( res => 
             {
             if (res.status == 200) 
             {
@@ -95,31 +95,32 @@ render() {
       return (
       <div>
 
-      <span > Destination Country: </span> <input type='text' name='destinationCountry' required onChange={(e) =>
+    
+      <span > Destination Country: </span> <input type='text' name='DestinationCountryName' required onChange={(e) =>
         this.handleDestCountryChange(
           this.state.Change,
-          "destinationCountry",
+          "DestinationCountryName",
           e.target.value
         )}/>
-      <span > Origin Country: </span> <input type='text' name='originCountry' required onChange={(e) =>
+      <span > Origin Country: </span> <input type='text' name='OriginCountryName' required onChange={(e) =>
         this.handleDestCountryChange(
           this.state.Change,
-          "originCountry",
+          "OriginCountryName",
           e.target.value
         )}/>
-      <span > Landing Date: </span> <input type='datetime-local' name='landingDate' required onChange={(e) =>
+      <span > Landing Date: </span> <input type='datetime-local' name='LandingTime' required onChange={(e) =>
         this.handleDestCountryChange(
           this.state.Change,
-          "landingDate",
+          "LandingTime",
           e.target.value
         )}/>
-      <span > Departure Date: </span> <input type='datetime-local' name='departureDate' required onChange={(e) =>
+      <span > Departure Date: </span> <input type='datetime-local' name='DepartureTime' required onChange={(e) =>
         this.handleDestCountryChange(
           this.state.Change,
-          "departureDate",
+          "DepartureTime",
           e.target.value
         )}/>
-       <button onClick={this.getAllFlightsByParams}>Search</button>
+      <button  onClick={this.getAllFlightsByParams}>Search</button>
 
       <h3>Flights</h3>
         <table>
@@ -131,7 +132,6 @@ render() {
               <th>Departure Time</th>
               <th>Landing Time</th>
               <th>Remaining Tickets</th>
-              <th>Ticket ID</th>
               <th></th>
             </tr>
           </thead>
@@ -157,33 +157,33 @@ render() {
           }
           return(
             <div>
-            <form>
-            <span > Destination Country: </span> <input type='text' name='destinationCountry' required onChange={(e) =>
+          
+            <span > Destination Country: </span> <input type='text' name='DestinationCountryName' required onChange={(e) =>
               this.handleDestCountryChange(
                 this.state.Change,
-                "destinationCountry",
+                "DestinationCountryName",
                 e.target.value
               )}/>
-            <span > Origin Country: </span> <input type='text' name='originCountry' required onChange={(e) =>
+            <span > Origin Country: </span> <input type='text' name='OriginCountryName' required onChange={(e) =>
               this.handleDestCountryChange(
                 this.state.Change,
-                "originCountry",
+                "OriginCountryName",
                 e.target.value
               )}/>
-            <span > Landing Date: </span> <input type='datetime-local' name='landingDate' required onChange={(e) =>
+            <span > Landing Date: </span> <input type='datetime-local' name='LandingTime' required onChange={(e) =>
               this.handleDestCountryChange(
                 this.state.Change,
-                "landingDate",
+                "LandingTime",
                 e.target.value
               )}/>
-            <span > Departure Date: </span> <input type='datetime-local' name='departureDate' required onChange={(e) =>
+            <span > Departure Date: </span> <input type='datetime-local' name='DepartureTime' required onChange={(e) =>
               this.handleDestCountryChange(
                 this.state.Change,
-                "departureDate",
+                "DepartureTime",
                 e.target.value
               )}/>
-            <button type="submit" onClick={this.getAllFlightsByParams}>Search</button>
-          </form>
+            <button  onClick={this.getAllFlightsByParams}>Search</button>
+
             <h3>Flights</h3>
         <table>
           <thead>
@@ -194,7 +194,6 @@ render() {
               <th>Departure Time</th>
               <th>Landing Time</th>
               <th>Remaining Tickets</th>
-              <th>Ticket ID</th>
               <th></th>
             </tr>
           </thead>

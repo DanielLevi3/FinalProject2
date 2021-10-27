@@ -253,9 +253,10 @@ namespace WebAppForFinal.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("getflightbyparameters")]
-        public async Task<ActionResult<Flights>> GetFlightByParameters(FlightParametersDTO f_paramDTO)
+        [HttpPost("getflightbyparameters")]
+        public async Task<ActionResult<Flights>> GetFlightByParameters([FromBody]FlightParametersDTO f_paramDTO)
         {
+           
             FlightParameters f_param = m_mapper.Map<FlightParameters>(f_paramDTO);
             List<FlightDTO> flightDTOs = new List<FlightDTO>(); 
             IList<Flights> resultFlights = null;
